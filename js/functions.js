@@ -31,10 +31,12 @@ console.log(checkPallindrome('3*3'));
 // Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа. Если в строке нет ни одной цифры, функция должна вернуть NaN:Если хотите усложнить задание, предусмотрите случай, когда вместо строки приходит число. Обратите внимание, что возвращать функция по-прежнему должна только целые положительные числа:
 
 const numbers = (data) => {
-  if(data !== !isNaN) {
-    return Math.abs(data);
+  if(+data || +data === 0) {
+    return Math.abs(+data);
   }
+
   const numberFromString = +[...data.replaceAll(' ','')].filter((item) => !isNaN(+item)).join('');
+
   if (numberFromString) {
     return numberFromString;
   }
@@ -44,3 +46,5 @@ const numbers = (data) => {
 console.log(numbers('2023 год'));
 console.log(numbers('2год023 '));
 console.log(numbers(-42));
+console.log(numbers(42));
+console.log(numbers(0));
