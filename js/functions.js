@@ -1,10 +1,7 @@
 // Функция для проверки длины строки. Она принимает строку, которую нужно проверить, и максимальную длину и возвращает true, если строка меньше или равна указанной длине, и false, если строка длиннее. Эта функция нам пригодится для валидации формы
 
 function checkStringLenght(string, stringLenght) {
-  if (string.length <= stringLenght) {
-    return true;
-  }
-  return false;
+  return string.length <= stringLenght;
 }
 
 console.log(checkStringLenght('проверяемая строка', 20));
@@ -31,14 +28,21 @@ console.log(checkPallindrome('3*3'));
 // Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа. Если в строке нет ни одной цифры, функция должна вернуть NaN:Если хотите усложнить задание, предусмотрите случай, когда вместо строки приходит число. Обратите внимание, что возвращать функция по-прежнему должна только целые положительные числа:
 
 const numbers = (data) => {
-  if(+data || +data === 0) {
-    return Math.abs(+data);
+  if(typeof data === 'number') {
+    return data;
   }
 
-  const numberFromString = +[...data.replaceAll(' ','')].filter((item) => !isNaN(+item)).join('');
+  let resultNumber = '';
+  const dataArray = [...data];
 
-  if (numberFromString) {
-    return numberFromString;
+  for(let i = 0; i < dataArray.length; i++) {
+    if (parseInt(dataArray[i], 10) || parseInt(dataArray[i], 10) === 0) {
+      resultNumber += dataArray[i];
+    }
+  }
+
+  if (resultNumber) {
+    return parseInt(resultNumber, 10);
   }
   return NaN;
 };
@@ -48,3 +52,4 @@ console.log(numbers('2год023 '));
 console.log(numbers(-42));
 console.log(numbers(42));
 console.log(numbers(0));
+console.log(numbers('ujl'));
