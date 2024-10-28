@@ -60,6 +60,7 @@ const DESCRIPTIONS = [
   'Солнечное утро',
   'Необычный закат',
   'Тихая гладь озера',
+  'Волшебный закат'
 ];
 
 const COMMENTS = [
@@ -89,14 +90,14 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-function counter () {
+function getIndexIncrement () {
   let count = 0;
   return function () {
     return ++count;
   };
 }
 
-const commentCounter = counter();
+const commentCounter = getIndexIncrement();
 
 const createComment = (index = commentCounter()) => ({
   id: `${index}`,
@@ -105,7 +106,7 @@ const createComment = (index = commentCounter()) => ({
   name: NAMES[getRandomInteger(0, NAMES.length - 1)],
 });
 
-const photoCounter = counter();
+const photoCounter = getIndexIncrement();
 
 const createPhoto = (index = photoCounter()) => ({
   id: `${index}`,
