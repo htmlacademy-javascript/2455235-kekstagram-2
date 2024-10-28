@@ -122,3 +122,5 @@ const listPhotos = Array.from(
   createPhoto
 );
 
+// eslint-disable-next-line no-console
+console.log(listPhotos);
