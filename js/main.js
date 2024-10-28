@@ -92,25 +92,25 @@ const getRandomInteger = (a, b) => {
 function counter () {
   let count = 0;
   return function () {
-    return count++;
+    return ++count;
   };
 }
 
 const commentCounter = counter();
 
-const createComment = () => ({
-  id: `${commentCounter()}`,
+const createComment = (index = commentCounter()) => ({
+  id: `${index}`,
   avatar: `img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}.svg`,
-  message: `${getRandomInteger(0, COMMENTS.length - 1)}`,
-  name: `${getRandomInteger(0, NAMES.length - 1)}`,
+  message: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
+  name: NAMES[getRandomInteger(0, NAMES.length - 1)],
 });
 
 const photoCounter = counter();
 
-const createPhoto = () => ({
-  id: `${photoCounter()}`,
-  url: `photos/${photoCounter()}.jpg`,
-  description: DESCRIPTIONS[photoCounter()],
+const createPhoto = (index = photoCounter()) => ({
+  id: `${index}`,
+  url: `photos/${index}.jpg`,
+  description: DESCRIPTIONS[index],
   likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: Array.from({ length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS)},
     createComment)
