@@ -122,4 +122,3 @@ const listPhotos = Array.from(
   createPhoto
 );
 
-console.log(listPhotos);
