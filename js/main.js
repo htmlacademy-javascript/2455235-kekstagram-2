@@ -97,21 +97,21 @@ function getIndexIncrement () {
   };
 }
 
-const commentCounter = getIndexIncrement();
+const getCommentCounter = getIndexIncrement();
 
-const createComment = (index = commentCounter()) => ({
+const createComment = (index = getCommentCounter()) => ({
   id: `${index}`,
   avatar: `img/avatar-${getRandomInteger(MIN_AVATAR, MAX_AVATAR)}.svg`,
   message: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
   name: NAMES[getRandomInteger(0, NAMES.length - 1)],
 });
 
-const photoCounter = getIndexIncrement();
+const getPhotoCounter = getIndexIncrement();
 
-const createPhoto = (index = photoCounter()) => ({
+const createPhoto = (index = getPhotoCounter()) => ({
   id: `${index}`,
   url: `photos/${index}.jpg`,
-  description: DESCRIPTIONS[index],
+  description: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)],
   likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: Array.from({ length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS)},
     createComment)
