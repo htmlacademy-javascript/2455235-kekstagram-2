@@ -1,4 +1,4 @@
 import { listPhotos } from './create-photos.js';
+import {renderThumbnails} from './render-photos.js';
 
-// eslint-disable-next-line no-console
-console.log(listPhotos);
+renderThumbnails(listPhotos);
