@@ -3,16 +3,17 @@ import { findTemplate } from './utils.js';
 const template = findTemplate('picture');
 const picturesContainer = document.querySelector('.pictures');
 
-
 const createThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
+  const image = thumbnail.querySelector('.picture__img');
+  const imageComment = thumbnail.querySelector('.picture__comments');
+  const imageLikes = thumbnail.querySelector('.picture__likes');
   thumbnail.href = photo.url;
   thumbnail.dataset.id = photo.id;
-  const image = thumbnail.querySelector('.picture__img');
   image.src = photo.url;
   image.alt = photo.description;
-  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
-  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+  imageComment.textContent = photo.comments.length;
+  imageLikes.textContent = photo.likes;
   return thumbnail;
 };
 
