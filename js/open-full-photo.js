@@ -1,37 +1,41 @@
 import { picturesContainer } from './render-photos.js';
-import {isEscapeKey, isEnterKey} from './utils.js';
+import {isEscapeKey} from './utils.js';
 import {renderFullPhoto} from './render-full-photo.js';
 import { listPhotos } from './create-photos.js';
 
 const bigPicture = document.querySelector('.big-picture');
-const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-let chosenPhoto;
+const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+const body = document.body;
+
+
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeFullPhoto();
+  }
+};
 
 function openFullPhoto() {
   bigPicture.classList.remove('hidden');
+  body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
 }
 
 function closeFullPhoto() {
   bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 picturesContainer.addEventListener('click', (evt) => {
-  if (evt.target.closest('.picture')) {
+  const chosenPhoto = evt.target.closest('.picture');
+  if (chosenPhoto) {
     evt.preventDefault();
-    chosenPhoto = evt.target.closest('.picture').getAttribute('data-id');
-    renderFullPhoto(chosenPhoto, listPhotos);
+    const chosenPhotoID = chosenPhoto.getAttribute('data-id');
+    renderFullPhoto(chosenPhotoID, listPhotos);
     openFullPhoto();
   }
 });
 
-bigPictureCancel.addEventListener('click', () => {
-  closeFullPhoto();
-});
+bigPictureClose.addEventListener('click', closeFullPhoto);
 
-bigPictureCancel.addEventListener('keydown', (evt) => {
-  if (isEnterKey(evt) || isEscapeKey(evt)) {
-    closeFullPhoto();
-  }
-});
-
-export { bigPicture, openFullPhoto };
