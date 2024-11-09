@@ -23,5 +23,9 @@ const findTemplate = (id) =>{
   return template.content.firstElementChild;
 };
 
-export {getRandomInteger, getIndexIncrement, findTemplate};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+export {getRandomInteger, getIndexIncrement, findTemplate, isEscapeKey, isEnterKey};
 
