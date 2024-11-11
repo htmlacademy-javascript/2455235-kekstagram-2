@@ -21,4 +21,4 @@ const renderThumbnails = (photos) => {
   picturesContainer.append(...photos.map((item) =>(createThumbnail(item))));
 };
 
-export {renderThumbnails};
+export {renderThumbnails, picturesContainer};
