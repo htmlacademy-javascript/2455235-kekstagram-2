@@ -18,18 +18,8 @@ const commentsList = bigPicture.querySelector('.social__comments');
 const bigPictureDescription = bigPicture.querySelector('.social__caption');
 const buttonMoreComments = bigPicture.querySelector('.comments-loader');
 
-const renderCommentsFullPhoto = (comments) => {
-  indexCounter += OPEN_COMMENTS_ON_CLICK;
-  if (comments.length < indexCounter) {
-    buttonMoreComments.disabled = true;
-  }
-  if (indexCounter > comments.length) {
-    buttonMoreComments.disabled = true;
-    shownComments.textContent = comments.length;
-  } else {
-    shownComments.textContent = indexCounter;
-  }
-  comments.slice(indexCounter - OPEN_COMMENTS_ON_CLICK, indexCounter).forEach((comment) => {
+const renderComments = (nextComments) => {
+  nextComments.forEach((comment) => {
     commentsList.insertAdjacentHTML(
       'beforeend',
       `<li class='social__comment'>
@@ -44,6 +34,29 @@ const renderCommentsFullPhoto = (comments) => {
   });
 };
 
+const disableShowcomments = (commentsLength) => {
+  buttonMoreComments.disabled = true;
+  shownComments.textContent = commentsLength;
+};
+
+const getCommentsToRender = (comments) => {
+  if(comments.length === 0) {
+    disableShowcomments(comments.length);
+    return comments;
+  }
+  indexCounter += OPEN_COMMENTS_ON_CLICK;
+  if (comments.length <= OPEN_COMMENTS_ON_CLICK) {
+    disableShowcomments(comments.length);
+    return comments;
+  }
+  if (indexCounter > comments.length) {
+    disableShowcomments(comments.length);
+  } else {
+    shownComments.textContent = indexCounter;
+  }
+  return comments.slice(indexCounter - OPEN_COMMENTS_ON_CLICK, indexCounter);
+};
+
 const renderFullPhoto = (chosenPhotoID, listPhotos) => {
   const dataForBigPhoto = listPhotos.find((item) => item.id === chosenPhotoID);
   bigPictureImg.src = dataForBigPhoto.url;
@@ -51,18 +64,18 @@ const renderFullPhoto = (chosenPhotoID, listPhotos) => {
   totalComments.textContent = dataForBigPhoto.comments.length;
   bigPictureDescription.textContent = dataForBigPhoto.description;
   commentsData = dataForBigPhoto.comments;
-  renderCommentsFullPhoto(commentsData);
+  renderComments(getCommentsToRender(commentsData));
 };
 
 buttonMoreComments.addEventListener('click', () => {
-  renderCommentsFullPhoto(commentsData);
+  renderComments(getCommentsToRender(commentsData));
 });
 
 const clearComments = () => {
   commentsList.innerHTML = '';
-  indexCounter = 0;
   buttonMoreComments.disabled = false;
-  buttonMoreComments.removeEventListener();
+  commentsData = [];
+  indexCounter = 0;
 };
 
-export { renderFullPhoto, clearComments };
+export { renderFullPhoto, clearComments, buttonMoreComments };
