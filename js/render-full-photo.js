@@ -49,7 +49,7 @@ const getCommentsToRender = (comments) => {
     disableShowcomments(comments.length);
     return comments;
   }
-  if (indexCounter > comments.length) {
+  if (indexCounter >= comments.length) {
     disableShowcomments(comments.length);
   } else {
     shownComments.textContent = indexCounter;
