@@ -78,4 +78,4 @@ const clearComments = () => {
   indexCounter = 0;
 };
 
-export { renderFullPhoto, clearComments, buttonMoreComments };
+export { renderFullPhoto, clearComments };

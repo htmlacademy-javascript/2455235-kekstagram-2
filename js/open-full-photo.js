@@ -1,6 +1,6 @@
 import { picturesContainer } from './render-photos.js';
 import {isEscapeKey} from './utils.js';
-import {renderFullPhoto, clearComments, buttonMoreComments} from './render-full-photo.js';
+import {renderFullPhoto, clearComments} from './render-full-photo.js';
 import { listPhotos } from './create-photos.js';
 
 const bigPicture = document.querySelector('.big-picture');
@@ -25,7 +25,6 @@ function closeFullPhoto() {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  buttonMoreComments.removeEventListener('click', ()=>{});
   clearComments();
 }
 
