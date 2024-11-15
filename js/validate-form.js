@@ -6,14 +6,14 @@ const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
 let hashArray = [];
 
-const errorsHash = () => [
+const checkHashErrors = () => [
   {
     check: hashArray.some((hash) => hash.slice(1).includes('#')),
     error: 'хэштеги разделяются пробелами',
   },
   {
     check: hashArray.some((hash) => hash[0] !== '#'),
-    error: 'хэштег начинается с символа # (решётка);',
+    error: 'хэштег начинается с символа # (решётка)',
   },
   {
     check: hashArray.some((hash) => hash === '#'),
@@ -57,7 +57,7 @@ function validateHashtags(value) {
   }
 
   hashArray = value.trim().toLowerCase().split(' ');
-  const isValid = errorsHash().every((errorHash) => {
+  const isValid = checkHashErrors().every((errorHash) => {
     const isInvalid = errorHash.check;
     if (isInvalid) {
       hashErrorMassege = errorHash.error;
