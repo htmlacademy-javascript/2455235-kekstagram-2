@@ -5,11 +5,10 @@ const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
 let hashArray = [];
-let errorMassege;
 
-const errorsHash = [
+const errorsHash = () => [
   {
-    check: hashArray.some((hash) => hash.includes('#')),
+    check: hashArray.some((hash) => hash.slice(1).includes('#')),
     error: 'хэштеги разделяются пробелами',
   },
   {
@@ -21,7 +20,9 @@ const errorsHash = [
     error: 'хеш-тег не может состоять только из одной решётки',
   },
   {
-    check: hashArray.some((hash) => /^#[a-zа-яё0-9]$/i.test(hash)),
+    check: hashArray.some(
+      (hash) => !/^[a-zа-яё0-9]{1,19}$/i.test(hash.slice(1))
+    ),
     error: 'строка после решётки должна состоять из букв и чисел',
   },
   {
@@ -29,9 +30,13 @@ const errorsHash = [
     error: `максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
   },
   {
-    check: hashArray > MAX_NUMBER_HASHES,
+    check: hashArray.length > MAX_NUMBER_HASHES,
     error: `нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
-  }
+  },
+  {
+    check: [...new Set(hashArray)].length !== hashArray.length,
+    error: 'один и тот же хэштег не может быть использован дважды',
+  },
 ];
 
 const pristine = new Pristine(
@@ -40,60 +45,46 @@ const pristine = new Pristine(
     classTo: 'img-upload__field-wrapper',
     errorClass: 'img-upload__field-wrapper--error',
     errorTextParent: 'img-upload__field-wrapper',
-  }, false
+  },
+  false
 );
 
-// const hashErrorMassege = (hashArray) =>{
-//   [...hashArray].map((hash) => {
-//     if (/^#$/i.test(hash)) {
-//       console.log(errorsHash.nohash);
-//       return errorsHash.nohash;
-//     }
-//   }
-//   );
-
-// };
-
-function validateHashtags (value) {
-  if(!value) {
+// function hashErrorMassege (errorText) {return errorText};
+let hashErrorMassege;
+function validateHashtags(value) {
+  if (!value) {
     return true;
   }
 
-  hashArray = value.trim().toLowerCase();
-  console.log(hashArray);
-
-  return errorsHash.every((errorHash) =>{
+  hashArray = value.trim().toLowerCase().split(' ');
+  const isValid = errorsHash().every((errorHash) => {
     const isInvalid = errorHash.check;
-    console.log(isInvalid);
-    if(isInvalid) {
-      console.log(errorsHash.error);
-      errorMassege = errorsHash.error;
+    if (isInvalid) {
+      hashErrorMassege = errorHash.error;
+      console.log(hashErrorMassege);
     }
     return !isInvalid;
   });
+  return isValid;
 }
 
-// const hashArray = value.trim().split(' ');
-// if(hashArray.every((hash) => /^#[a-zа-яё0-9]{1,19}$/i.test(hash)) && [...new Set(hashArray)].length === hashArray.length) {
-//   return true;
-// } else {
-//   hashErrorMassege(hashArray);
-//   return false;
-// }
+const hashError = () =>
+  `${hashErrorMassege}`;
 
-
-function validateComment (value) {
+function validateComment(value) {
   return value.length >= 0 && value.length < 140;
 }
 
-const commentErrorMassege = () =>`максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
+const commentErrorMassege = () =>
+  `максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
 
-pristine.addValidator(imgHashtags, validateHashtags, errorMassege);
+pristine.addValidator(imgHashtags, validateHashtags, hashError);
 pristine.addValidator(imgComments, validateComment, commentErrorMassege);
 
-imgUploadForm.addEventListener('submit', (evt) =>{
+imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  if(pristine.validate()){
-    imgUploadForm.submit();
+  if (pristine.validate()) {
+    console.log(hashErrorMassege);
+      // imgUploadForm.submit();
   }
 });
