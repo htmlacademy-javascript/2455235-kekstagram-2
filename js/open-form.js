@@ -9,8 +9,9 @@ const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
 const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
 const imgDescription = imgUploadForm.querySelector('.text__description');
 
+
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription) {
     evt.preventDefault();
     closeUploadForm();
   }
@@ -21,7 +22,6 @@ const clearForm = () => {
   imgHashtags.value = '';
   imgDescription.value = '';
 };
-
 
 function openUploadForm() {
   imgUploadOverlay.classList.remove('hidden');
@@ -41,5 +41,3 @@ function closeUploadForm() {
 imgUploadInput.addEventListener('change', openUploadForm);
 
 export { imgUploadForm, imgHashtags };
-
-
