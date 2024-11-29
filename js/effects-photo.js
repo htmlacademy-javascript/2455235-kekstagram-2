@@ -44,7 +44,7 @@ const FILTER_EFFECTS = {
   },
 };
 
-sliderElement.style.display = 'none';
+sliderElement.classList.add('hidden');
 
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
@@ -94,12 +94,12 @@ effectsRadioButtons.forEach((button) =>{
   button.addEventListener('click', (evt) => {
     imgUploadPreview.style.filter = 'unset';
     if (evt.target.value !== 'none') {
-      sliderElement.style.display = 'block';
+      sliderElement.classList.remove('hidden');
       const effect = evt.target.value;
       effectLevelValue.setAttribute('data-effect', effect);
       updateSliderData(effect);
     } else if (evt.target.value === 'none') {
-      sliderElement.style.display = 'none';
+      sliderElement.classList.add('hidden');
     }
   });
 });
