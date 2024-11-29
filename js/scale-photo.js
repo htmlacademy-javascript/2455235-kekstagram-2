@@ -1,10 +1,49 @@
 //1. Не забыть исправить магическое число. 2. Можно ли в этот файл экспортировать уже найденный элемент контейнер открытой формы, чтобы опять не искать по всему документу. 3.
+import { imgUploadForm } from './open-form.js';
 
-const scale = document.querySelector('.scale');
+const scale = imgUploadForm.querySelector('.scale');
+
 const scaleValue = scale.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview');
+const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
+const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
+const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
+
 
 const SCALE_STEP = 25;
+
+const FILTER_EFFECTS = {
+  chrome: {
+    filter: 'grayscale',
+    unit: '',
+    range: [0, 1],
+    step: 0.1,
+  },
+  sepia: {
+    filter: 'sepia',
+    unit: '',
+    range: [0, 1],
+    step: 0.1,
+  },
+  marvin: {
+    filter: 'invert',
+    unit: '%',
+    range: [0, 100],
+    step: 1,
+  },
+  phobos: {
+    filter: 'blur',
+    unit: 'px',
+    range: [0, 3],
+    step: 0.1,
+  },
+  heat: {
+    filter: 'brightness',
+    range: [1, 3],
+    unit: '',
+    step: 0.1,
+  },
+};
 
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
@@ -26,44 +65,6 @@ scale.addEventListener('click', (evt) => {
     changePhotoSize('+', parseInt(scaleValue.value, 10));
   }
 });
-
-const effectsList = document.querySelector('.effects__list');
-const effectLevel = document.querySelector('.effect-level');
-const effectLevelValue = effectLevel.querySelector('.effect-level__value');
-const sliderElement = effectLevel.querySelector('.effect-level__slider');
-
-const FILTER_EFFECTS = {
-  chrome: {
-    minfilter: 'grayscale(0)',
-    maxfilter: 'grayscale(1)',
-    range: [0, 1],
-    step: 0.1,
-  },
-  sepia: {
-    minfilter: 'sepia(0)',
-    maxfilter: 'sepia(1)',
-    range: [0, 1],
-    step: 0.1,
-  },
-  marvin: {
-    minfilter: 'invert(0)',
-    maxfilter: 'invert(100%)',
-    range: [0, 100],
-    step: 1,
-  },
-  phobos: {
-    minfilter: 'blur(0)',
-    maxfilter: 'blur(3px)',
-    range: [0, 3],
-    step: 0.1,
-  },
-  heat: {
-    minfilter: 'brightness(1)',
-    maxfilter: 'brightness(3)',
-    range: [1, 3],
-    step: 0.1,
-  },
-};
 
 sliderElement.style.display = 'none';
 
@@ -88,24 +89,25 @@ noUiSlider.create(sliderElement, {
   // },
 });
 
-console.log(effectsList);
+effectsRadioButtons.forEach((button) =>{
+  button.addEventListener('click', (evt) => {
+    if (evt.target.value !== 'none') {
+      sliderElement.style.display = 'block';
+      const effect = evt.target.value;
+      effectLevelValue.setAttribute('data-effect', effect);
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: FILTER_EFFECTS[effect].range[0],
+          max: FILTER_EFFECTS[effect].range[1]
+        },
+        start: FILTER_EFFECTS[effect].range[1],
+        step: FILTER_EFFECTS[effect].step
+      });
+    } else if (evt.target.value === 'none') {
+      sliderElement.style.display = 'none';
+    }
+  });
 
-effectsList.addEventListener('click', (evt) => {
-  if (evt.target.classList.contains('effects__radio') && evt.target.value !== 'none') {
-    sliderElement.style.display = 'block';
-    const effect = evt.target.value;
-    console.log(effect, FILTER_EFFECTS[effect]);
-    sliderElement.noUiSlider.updateOptions({
-      range: {
-        min: FILTER_EFFECTS[effect].range[0],
-        max: FILTER_EFFECTS[effect].range[1]
-      },
-      start: FILTER_EFFECTS[effect].range[1],
-      step: FILTER_EFFECTS[effect].step
-    });
-  } else if (evt.target.value === 'none') {
-    sliderElement.style.display = 'none';
-  }
 
   // else {
   //   sliderElement.noUiSlider.updateOptions({
@@ -121,5 +123,13 @@ effectsList.addEventListener('click', (evt) => {
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = sliderElement.noUiSlider.get();
-  console.log(effectLevelValue.value);
+  if(effectLevelValue.dataset.effect) {
+    console.log(FILTER_EFFECTS[effectLevelValue.dataset.effect].filter);
+
+    console.log(`${FILTER_EFFECTS[effectLevelValue.dataset.effect].filter}(${effectLevelValue.value.trim()}${FILTER_EFFECTS[effectLevelValue.dataset.effect].unit})`);
+    imgUploadPreview.style.filter = `${FILTER_EFFECTS[effectLevelValue.dataset.effect].filter}(${effectLevelValue.value.trim()}${FILTER_EFFECTS[effectLevelValue.dataset.effect].unit})`;
+  }
+
+  // ;
+  // console.log(`${FILTER_EFFECTS[effectLevelValue.dataset.effect]}(${effectLevelValue.value})`);
 });
