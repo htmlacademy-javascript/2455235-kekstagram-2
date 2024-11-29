@@ -62,7 +62,6 @@ function validateHashtags(value) {
     }
     return hashErrorMassege;
   });
-  console.log(hashErrorMassege);
   return hashErrorMassege.length === 0;
 }
 
