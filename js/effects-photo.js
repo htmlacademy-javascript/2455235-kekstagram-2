@@ -91,7 +91,7 @@ const changePhotoStyle = (effect) => {
 };
 
 effectsRadioButtons.forEach((button) =>{
-  button.addEventListener('click', (evt) => {
+  button.addEventListener('change', (evt) => {
     imgUploadPreview.style.filter = 'unset';
     if (evt.target.value !== 'none') {
       sliderElement.classList.remove('hidden');
