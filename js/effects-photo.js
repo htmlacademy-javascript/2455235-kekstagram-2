@@ -1,4 +1,3 @@
-//1. Не забыть исправить магическое число. 2. Можно ли в этот файл экспортировать уже найденный элемент контейнер открытой формы, чтобы опять не искать по всему документу. 3.
 import { imgUploadForm } from './open-form.js';
 
 const scale = imgUploadForm.querySelector('.scale');
@@ -45,12 +44,22 @@ const FILTER_EFFECTS = {
   },
 };
 
+sliderElement.style.display = 'none';
+
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
     action === '+' ? scaleData + SCALE_STEP : scaleData - SCALE_STEP;
   imgUploadPreview.style.transform = `scale(${newScaleValue * 0.01})`;
   scaleValue.setAttribute('value', `${newScaleValue}%`);
 };
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  start: 100,
+});
 
 scale.addEventListener('click', (evt) => {
   if (
@@ -66,31 +75,9 @@ scale.addEventListener('click', (evt) => {
   }
 });
 
-sliderElement.style.display = 'none';
-
-noUiSlider.create(sliderElement, {
-  range: {
-    min: 0,
-    max: 100,
-  },
-  start: 100,
-  // step: 1,
-  // connect: 'lower',
-  // format: {
-  //   to: function (value) {
-  //     if (Number.isInteger(value)) {
-  //       return value.toFixed(0);
-  //     }
-  //     return value.toFixed(1);
-  //   },
-  //   from: function (value) {
-  //     return parseFloat(value);
-  //   },
-  // },
-});
-
 effectsRadioButtons.forEach((button) =>{
   button.addEventListener('click', (evt) => {
+    imgUploadPreview.style.filter = 'unset';
     if (evt.target.value !== 'none') {
       sliderElement.style.display = 'block';
       const effect = evt.target.value;
@@ -107,29 +94,12 @@ effectsRadioButtons.forEach((button) =>{
       sliderElement.style.display = 'none';
     }
   });
-
-
-  // else {
-  //   sliderElement.noUiSlider.updateOptions({
-  //     range: {
-  //       min: 0,
-  //       max: 100,
-  //     },
-  //     step: 1
-  //   });
-  //   sliderElement.noUiSlider.set(80);
-  //   }
 });
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = sliderElement.noUiSlider.get();
   if(effectLevelValue.dataset.effect) {
-    console.log(FILTER_EFFECTS[effectLevelValue.dataset.effect].filter);
-
-    console.log(`${FILTER_EFFECTS[effectLevelValue.dataset.effect].filter}(${effectLevelValue.value.trim()}${FILTER_EFFECTS[effectLevelValue.dataset.effect].unit})`);
-    imgUploadPreview.style.filter = `${FILTER_EFFECTS[effectLevelValue.dataset.effect].filter}(${effectLevelValue.value.trim()}${FILTER_EFFECTS[effectLevelValue.dataset.effect].unit})`;
+    const effect = FILTER_EFFECTS[effectLevelValue.dataset.effect];
+    imgUploadPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
   }
-
-  // ;
-  // console.log(`${FILTER_EFFECTS[effectLevelValue.dataset.effect]}(${effectLevelValue.value})`);
 });
