@@ -53,14 +53,6 @@ const changePhotoSize = (action, scaleData) => {
   scaleValue.setAttribute('value', `${newScaleValue}%`);
 };
 
-noUiSlider.create(sliderElement, {
-  range: {
-    min: 0,
-    max: 100,
-  },
-  start: 100,
-});
-
 scale.addEventListener('click', (evt) => {
   if (
     evt.target.classList.contains('scale__control--smaller') &&
@@ -75,6 +67,29 @@ scale.addEventListener('click', (evt) => {
   }
 });
 
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  start: 100,
+});
+
+const updateSliderData = (effect) => {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: FILTER_EFFECTS[effect].range[0],
+      max: FILTER_EFFECTS[effect].range[1]
+    },
+    start: FILTER_EFFECTS[effect].range[1],
+    step: FILTER_EFFECTS[effect].step
+  });
+};
+
+const changePhotoStyle = (effect) => {
+  imgUploadPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
+};
+
 effectsRadioButtons.forEach((button) =>{
   button.addEventListener('click', (evt) => {
     imgUploadPreview.style.filter = 'unset';
@@ -82,14 +97,7 @@ effectsRadioButtons.forEach((button) =>{
       sliderElement.style.display = 'block';
       const effect = evt.target.value;
       effectLevelValue.setAttribute('data-effect', effect);
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: FILTER_EFFECTS[effect].range[0],
-          max: FILTER_EFFECTS[effect].range[1]
-        },
-        start: FILTER_EFFECTS[effect].range[1],
-        step: FILTER_EFFECTS[effect].step
-      });
+      updateSliderData(effect);
     } else if (evt.target.value === 'none') {
       sliderElement.style.display = 'none';
     }
@@ -100,6 +108,6 @@ sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = sliderElement.noUiSlider.get();
   if(effectLevelValue.dataset.effect) {
     const effect = FILTER_EFFECTS[effectLevelValue.dataset.effect];
-    imgUploadPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
+    changePhotoStyle(effect);
   }
 });
