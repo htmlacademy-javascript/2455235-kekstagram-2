@@ -5,7 +5,7 @@ const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
 let hashArray = [];
-const hashErrorMassege = [];
+let hashErrorMassege = [];
 
 const checkHashErrors = () => [
   {
@@ -51,11 +51,11 @@ const pristine = new Pristine(
 );
 
 function validateHashtags(value) {
+  hashErrorMassege = [];
   if (!value) {
     return true;
   }
   hashArray = value.trim().toLowerCase().split(' ');
-
   checkHashErrors().map((errorHash) => {
     if (errorHash.check) {
       hashErrorMassege.push(errorHash.error);
@@ -66,7 +66,7 @@ function validateHashtags(value) {
 }
 
 function validateComment(value) {
-  return value.length >= 0 && value.length < 140;
+  return value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
 }
 
 const commentErrorMassege = () =>
