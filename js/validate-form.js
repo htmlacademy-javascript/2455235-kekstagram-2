@@ -1,6 +1,7 @@
 import { imgUploadForm, imgHashtags } from './open-form.js';
 import {sendData, RequestResultIdTemplates} from './api.js';
 import { showAlert, findTemplate } from './utils.js';
+// import { body } from './open-full-photo.js';
 // import { closeUploadForm } from './open-form.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
@@ -96,7 +97,16 @@ const showSuccess = (templateID) => {
   document.body.append(successElement);
 };
 
-// showSuccess.addEventListener('change', openUploadForm);
+// const closeSuccessElement = (elementToRemove) => {
+//   elementToRemove.remove();
+// };
+
+// body.addEventListener('click', (evt) =>{
+//   if(evt.target.classList.contains('success__button') || !evt.target.classList.contains('.success')) {
+//     const elementToRemove = document.querySelector('.success');
+//     closeSuccessElement(elementToRemove);
+//   }
+// });
 
 const setUserFormSubmit = (onSuccess) => {
   imgUploadForm.addEventListener('submit', (evt) => {
