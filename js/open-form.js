@@ -39,5 +39,4 @@ function closeUploadForm() {
 }
 
 imgUploadInput.addEventListener('change', openUploadForm);
-
-export { imgUploadForm, imgHashtags };
+export { imgUploadForm, imgHashtags, closeUploadForm };

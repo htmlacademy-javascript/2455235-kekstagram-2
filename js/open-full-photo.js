@@ -40,4 +40,4 @@ picturesContainer.addEventListener('click', (evt) => {
 
 bigPictureClose.addEventListener('click', closeFullPhoto);
 
-export { body };
+export { body, closeFullPhoto };

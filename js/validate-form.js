@@ -1,6 +1,10 @@
 import { imgUploadForm, imgHashtags } from './open-form.js';
+import {sendData} from './api.js';
+import { showAlert } from './utils.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
+const submitButton = imgUploadForm.querySelector('.img-upload__submit');
+
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
@@ -77,9 +81,31 @@ const hashesErrorText = () => hashErrorMassege;
 pristine.addValidator(imgHashtags, validateHashtags,hashesErrorText);
 pristine.addValidator(imgComments, validateComment, commentErrorMassege);
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    imgUploadForm.submit();
-  }
-});
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+};
+
+const setUserFormSubmit = (onSuccess) => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      {
+        blockSubmitButton();
+        sendData(new FormData(evt.target))
+          .then(onSuccess)
+          .catch(
+            () => {
+              showAlert();
+            }
+          )
+          .finally(unblockSubmitButton);
+      }
+    }
+  });
+};
+
+export { setUserFormSubmit };
