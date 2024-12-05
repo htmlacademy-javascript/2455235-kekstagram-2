@@ -10,10 +10,11 @@ const Method = {
   POST: 'POST',
 };
 
-// const ErrorText = {
-//   GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-//   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
-// };
+const RequestResultIdTemplates = {
+  LOAD_ERROR: 'data-error',
+  SEND_ERROR: 'error',
+  SUCCESS: 'success'
+};
 
 const load = (route, method = Method.GET, body = null) =>
   fetch(`${BASE_URL}${route}`, {method, body})
@@ -31,4 +32,4 @@ const getData = () => load(Route.GET_DATA);
 
 const sendData = (body) => load(Route.SEND_DATA, Method.POST, body);
 
-export {getData, sendData};
+export {getData, sendData, RequestResultIdTemplates};

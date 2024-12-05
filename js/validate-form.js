@@ -1,6 +1,7 @@
 import { imgUploadForm, imgHashtags } from './open-form.js';
-import {sendData} from './api.js';
-import { showAlert } from './utils.js';
+import {sendData, RequestResultIdTemplates} from './api.js';
+import { showAlert, findTemplate } from './utils.js';
+// import { closeUploadForm } from './open-form.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
@@ -89,6 +90,14 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
+const showSuccess = (templateID) => {
+  const templateSuccess = findTemplate(templateID);
+  const successElement = templateSuccess.cloneNode(true);
+  document.body.append(successElement);
+};
+
+// showSuccess.addEventListener('change', openUploadForm);
+
 const setUserFormSubmit = (onSuccess) => {
   imgUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -97,9 +106,10 @@ const setUserFormSubmit = (onSuccess) => {
         blockSubmitButton();
         sendData(new FormData(evt.target))
           .then(onSuccess)
+          .then(showSuccess(RequestResultIdTemplates.SUCCESS))
           .catch(
             () => {
-              showAlert();
+              showAlert(RequestResultIdTemplates.SEND_ERROR);
             }
           )
           .finally(unblockSubmitButton);
@@ -108,4 +118,4 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-export { setUserFormSubmit, pristine };
+export { setUserFormSubmit, pristine, showSuccess };

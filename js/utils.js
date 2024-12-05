@@ -29,7 +29,8 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-const showAlert = (template = findTemplate('data-error')) => {
+const showAlert = (templateId) => {
+  const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
   document.body.append(errorElement);
 
@@ -38,5 +39,5 @@ const showAlert = (template = findTemplate('data-error')) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomInteger, getIndexIncrement, findTemplate, isEscapeKey, isEnterKey, showAlert};
+export {getRandomInteger, getIndexIncrement, findTemplate, isEscapeKey, isEnterKey, showAlert };
 

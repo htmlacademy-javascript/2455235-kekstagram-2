@@ -3,7 +3,7 @@ import {renderThumbnails} from './render-photos.js';
 import './open-full-photo.js';
 import { setUserFormSubmit } from './validate-form.js';
 import './effects-photo.js';
-import { getData } from './api.js';
+import { getData, RequestResultIdTemplates } from './api.js';
 import { showAlert } from './utils.js';
 import { closeUploadForm } from './open-form.js';
 
@@ -15,7 +15,7 @@ getData()
   })
   .catch(
     () => {
-      showAlert();
+      showAlert(RequestResultIdTemplates.LOAD_ERROR);
     }
   );
 
