@@ -4,7 +4,7 @@ import './open-full-photo.js';
 import './validate-form.js';
 import './effects-photo.js';
 import { getData, ErrorIdTemplates } from './api.js';
-import { showRequestInfo, showRequestInfoTimeout } from './utils.js';
+import { showRequestInfoTimeout } from './utils.js';
 // import { closeUploadForm } from './open-form.js';
 
 const PHOTO_ITEMS_NUMBER = 25;
@@ -14,5 +14,5 @@ getData()
     renderThumbnails(photos.slice(0, PHOTO_ITEMS_NUMBER));
   })
   .catch(() => {
-    showRequestInfoTimeout(showRequestInfo(ErrorIdTemplates.LOAD_ERROR));
+    showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR);
   });

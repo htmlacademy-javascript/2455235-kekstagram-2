@@ -36,7 +36,12 @@ const showRequestInfo = (templateId) => {
   return templateId;
 };
 
-const showRequestInfoTimeout = (errorElement) => {
+
+const showRequestInfoTimeout = (templateId) => {
+  const template = findTemplate(templateId);
+  const errorElement = template.cloneNode(true);
+  document.body.append(errorElement);
+
   setTimeout(() => {
     errorElement.remove();
   }, ALERT_SHOW_TIME);
