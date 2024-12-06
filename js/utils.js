@@ -7,19 +7,19 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-function getIndexIncrement () {
+function getIndexIncrement() {
   let count = 0;
   return function () {
     return ++count;
   };
 }
 
-const findTemplate = (id) =>{
+const findTemplate = (id) => {
   const template = document.getElementById(id);
-  if(!template) {
+  if (!template) {
     throw new Error(`Template not found: #${id}`);
   }
-  if(!(template instanceof HTMLTemplateElement)) {
+  if (!(template instanceof HTMLTemplateElement)) {
     throw new Error(`Element is not template: #${id}`);
   }
   return template.content.firstElementChild;
@@ -29,15 +29,24 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-const showAlert = (templateId) => {
+const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
   document.body.append(errorElement);
+};
 
+const showRequestInfoWithTimeout = (errorElement) => {
   setTimeout(() => {
     errorElement.remove();
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomInteger, getIndexIncrement, findTemplate, isEscapeKey, isEnterKey, showAlert };
-
+export {
+  getRandomInteger,
+  getIndexIncrement,
+  findTemplate,
+  isEscapeKey,
+  isEnterKey,
+  showRequestInfo,
+  showRequestInfoWithTimeout,
+};

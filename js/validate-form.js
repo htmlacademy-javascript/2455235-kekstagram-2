@@ -1,8 +1,9 @@
 import { imgUploadForm, imgHashtags } from './open-form.js';
-import {sendData, RequestResultIdTemplates} from './api.js';
-import { showAlert, findTemplate } from './utils.js';
-// import { body } from './open-full-photo.js';
-// import { closeUploadForm } from './open-form.js';
+import { sendData, ErrorIdTemplates } from './api.js';
+import { showRequestInfo } from './utils.js';
+import { body } from './open-full-photo.js';
+import { closeUploadForm } from './open-form.js';
+import { isEscapeKey } from './utils.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
@@ -80,7 +81,7 @@ const commentErrorMassege = () =>
 
 const hashesErrorText = () => hashErrorMassege;
 
-pristine.addValidator(imgHashtags, validateHashtags,hashesErrorText);
+pristine.addValidator(imgHashtags, validateHashtags, hashesErrorText);
 pristine.addValidator(imgComments, validateComment, commentErrorMassege);
 
 const blockSubmitButton = () => {
@@ -91,41 +92,45 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
-const showSuccess = (templateID) => {
-  const templateSuccess = findTemplate(templateID);
-  const successElement = templateSuccess.cloneNode(true);
-  document.body.append(successElement);
+const checkAndCloseSuccess = (evt) => {
+  if (
+    isEscapeKey(evt) ||
+    evt.target.classList.contains('success__button') ||
+    !evt.target.classList.contains('success__inner')
+  ) {
+    const successElement = document.querySelector('.success');
+    successElement.remove();
+    body.removeEventListener('click', checkAndCloseSuccess);
+    document.removeEventListener('keydown', checkAndCloseSuccess);
+  }
 };
 
-// const closeSuccessElement = (elementToRemove) => {
-//   elementToRemove.remove();
-// };
+const removeSuccess = () => {
+  body.addEventListener('click', checkAndCloseSuccess);
+  document.addEventListener('keydown', checkAndCloseSuccess);
+};
 
-// body.addEventListener('click', (evt) =>{
-//   if(evt.target.classList.contains('success__button') || !evt.target.classList.contains('.success')) {
-//     const elementToRemove = document.querySelector('.success');
-//     closeSuccessElement(elementToRemove);
-//   }
-// });
+const onSuccess = () => {
+  closeUploadForm();
+  showRequestInfo(ErrorIdTemplates.SUCCESS);
+  removeSuccess();
+};
 
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = () => {
   imgUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
-      {
-        blockSubmitButton();
-        sendData(new FormData(evt.target))
-          .then(onSuccess)
-          .then(showSuccess(RequestResultIdTemplates.SUCCESS))
-          .catch(
-            () => {
-              showAlert(RequestResultIdTemplates.SEND_ERROR);
-            }
-          )
-          .finally(unblockSubmitButton);
-      }
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(() => {
+          showRequestInfo(ErrorIdTemplates.SEND_ERROR);
+        })
+        .finally(unblockSubmitButton);
     }
   });
 };
 
-export { setUserFormSubmit, pristine, showSuccess };
+setUserFormSubmit(onSuccess);
+
+export { pristine };
