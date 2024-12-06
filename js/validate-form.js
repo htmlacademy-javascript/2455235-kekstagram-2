@@ -11,8 +11,23 @@ const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
+
+const RequestResultTags = {
+  error: {
+    SECTION: 'error',
+    BUTTON: 'error__button',
+    INNER: 'error__inner'
+  },
+  success: {
+    SECTION: 'success',
+    BUTTON: 'success__button',
+    INNER: 'success__inner'
+  }
+};
+
 let hashArray = [];
 let hashErrorMassege = [];
+let infoRequestElement;
 
 const checkHashErrors = () => [
   {
@@ -92,28 +107,33 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
-const checkAndCloseSuccess = (evt) => {
+const closeInfo = (evt) => {
   if (
     isEscapeKey(evt) ||
-    evt.target.classList.contains('success__button') ||
-    !evt.target.classList.contains('success__inner')
+    evt.target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
+    !evt.target.classList.contains(RequestResultTags[infoRequestElement].INNER)
   ) {
-    const successElement = document.querySelector('.success');
-    successElement.remove();
-    body.removeEventListener('click', checkAndCloseSuccess);
-    document.removeEventListener('keydown', checkAndCloseSuccess);
+    const currentInfoSection = document.querySelector(`.${RequestResultTags[infoRequestElement].SECTION}`);
+    currentInfoSection.remove();
+    body.removeEventListener('click', closeInfo);
+    document.removeEventListener('keydown', closeInfo);
   }
 };
 
-const removeSuccess = () => {
-  body.addEventListener('click', checkAndCloseSuccess);
-  document.addEventListener('keydown', checkAndCloseSuccess);
+const removeRequestInfo = () => {
+  body.addEventListener('click', closeInfo);
+  document.addEventListener('keydown', closeInfo);
 };
 
 const onSuccess = () => {
   closeUploadForm();
-  showRequestInfo(ErrorIdTemplates.SUCCESS);
-  removeSuccess();
+  infoRequestElement = showRequestInfo(ErrorIdTemplates.SUCCESS);
+  removeRequestInfo();
+};
+
+const onError = () => {
+  infoRequestElement = showRequestInfo(ErrorIdTemplates.SEND_ERROR);
+  removeRequestInfo();
 };
 
 const setUserFormSubmit = () => {
@@ -124,7 +144,7 @@ const setUserFormSubmit = () => {
       sendData(new FormData(evt.target))
         .then(onSuccess)
         .catch(() => {
-          showRequestInfo(ErrorIdTemplates.SEND_ERROR);
+          onError();
         })
         .finally(unblockSubmitButton);
     }

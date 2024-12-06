@@ -33,9 +33,10 @@ const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
   document.body.append(errorElement);
+  return templateId;
 };
 
-const showRequestInfoWithTimeout = (errorElement) => {
+const showRequestInfoTimeout = (errorElement) => {
   setTimeout(() => {
     errorElement.remove();
   }, ALERT_SHOW_TIME);
@@ -48,5 +49,5 @@ export {
   isEscapeKey,
   isEnterKey,
   showRequestInfo,
-  showRequestInfoWithTimeout,
+  showRequestInfoTimeout,
 };
