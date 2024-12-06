@@ -19,9 +19,6 @@ const onDocumentKeydown = (evt) => {
 };
 
 const clearForm = () => {
-  // imgUploadInput.value = '';
-  // imgHashtags.value = '';
-  // imgDescription.value = '';
   imgUploadForm.reset();
 };
 
