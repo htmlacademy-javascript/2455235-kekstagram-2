@@ -131,6 +131,6 @@ const setUserFormSubmit = () => {
   });
 };
 
-setUserFormSubmit(onSuccess);
+setUserFormSubmit();
 
 export { pristine };
