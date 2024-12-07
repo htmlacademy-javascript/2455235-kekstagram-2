@@ -33,7 +33,6 @@ const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
   document.body.append(errorElement);
-  return templateId;
 };
 
 

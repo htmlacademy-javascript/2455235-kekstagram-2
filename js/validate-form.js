@@ -125,14 +125,14 @@ const removeRequestInfo = () => {
   document.addEventListener('keydown', closeInfo);
 };
 
-const onSuccess = () => {
+const onSuccess = (ErrorIdTemplate) => function () {
   closeUploadForm();
-  infoRequestElement = showRequestInfo(ErrorIdTemplates.SUCCESS);
+  showRequestInfo(ErrorIdTemplate);
   removeRequestInfo();
 };
 
-const onError = () => {
-  infoRequestElement = showRequestInfo(ErrorIdTemplates.SEND_ERROR);
+const onError = (ErrorIdTemplate) => {
+  showRequestInfo(ErrorIdTemplate);
   removeRequestInfo();
 };
 
@@ -142,9 +142,9 @@ const setUserFormSubmit = () => {
     if (pristine.validate()) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(onSuccess)
+        .then(onSuccess(infoRequestElement = ErrorIdTemplates.SUCCESS))
         .catch(() => {
-          onError();
+          onError(infoRequestElement = ErrorIdTemplates.SEND_ERROR);
         })
         .finally(unblockSubmitButton);
     }
