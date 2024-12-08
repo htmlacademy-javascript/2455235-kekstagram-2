@@ -11,6 +11,17 @@ const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
 
 const SCALE_STEP = 25;
 
+const ScaleMaxMin = {
+  SCALE_MIN: '25%',
+  SCALE_MAX: '100%',
+};
+
+const SliderDefaultValues = {
+  SLIDER_MIN: 0,
+  SLIDER_MAX: 100,
+  SLIDER_START: 100
+};
+
 const FILTER_EFFECTS = {
   chrome: {
     filter: 'grayscale',
@@ -44,11 +55,16 @@ const FILTER_EFFECTS = {
   },
 };
 
+const ScaleAction = {
+  INCREASE: '+',
+  DECREASE: '-'
+};
+
 sliderElement.classList.add('hidden');
 
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
-    action === '+' ? scaleData + SCALE_STEP : scaleData - SCALE_STEP;
+  action === ScaleAction.INCREASE ? scaleData + SCALE_STEP : scaleData - SCALE_STEP ;
   imgUploadPreview.style.transform = `scale(${newScaleValue * 0.01})`;
   scaleValue.setAttribute('value', `${newScaleValue}%`);
 };
@@ -56,23 +72,23 @@ const changePhotoSize = (action, scaleData) => {
 scale.addEventListener('click', (evt) => {
   if (
     evt.target.classList.contains('scale__control--smaller') &&
-    scaleValue.value !== '25%'
+    scaleValue.value !== ScaleMaxMin.SCALE_MIN
   ) {
-    changePhotoSize('-', parseInt(scaleValue.value, 10));
+    changePhotoSize(ScaleAction.DECREASE, parseInt(scaleValue.value, 10));
   } else if (
     evt.target.classList.contains('scale__control--bigger') &&
-    scaleValue.value !== '100%'
+    scaleValue.value !== ScaleMaxMin.SCALE_MAX
   ) {
-    changePhotoSize('+', parseInt(scaleValue.value, 10));
+    changePhotoSize(ScaleAction.INCREASE, parseInt(scaleValue.value, 10));
   }
 });
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: 0,
-    max: 100,
+    min: SliderDefaultValues.SLIDER_MIN,
+    max: SliderDefaultValues.SLIDER_MAX,
   },
-  start: 100,
+  start: SliderDefaultValues.SLIDER_START
 });
 
 const updateSliderData = (effect) => {
