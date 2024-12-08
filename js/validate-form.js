@@ -141,7 +141,7 @@ const setUserFormSubmit = () => {
     evt.preventDefault();
     if (pristine.validate()) {
       blockSubmitButton();
-      sendData('new FormData(evt.target)')
+      sendData(new FormData(evt.target))
         .then(onSuccess(infoRequestElement = ErrorIdTemplates.SUCCESS))
         .catch(() => {
           onError(infoRequestElement = ErrorIdTemplates.SEND_ERROR);
