@@ -13,7 +13,6 @@ getData()
     const newPhotos = photos.slice(0, PHOTO_ITEMS_NUMBER);
     renderThumbnails(newPhotos);
     getBigPicture((chosenPhotoID) => renderFullPhoto(chosenPhotoID, newPhotos));
-    // console.log(chosenPhotoID);
   })
   .catch(() => {
     showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR);

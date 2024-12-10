@@ -120,20 +120,13 @@ const closeInfo = (evt) => {
   }
 };
 
-const removeRequestInfo = () => {
+const appendInfo = (infoId) => {
+  if(infoId === 'success') {
+    closeUploadForm();
+  }
+  showRequestInfo(infoId);
   body.addEventListener('click', closeInfo);
   document.addEventListener('keydown', closeInfo);
-};
-
-const onSuccess = (resultIdTemplate) => function () {
-  closeUploadForm();
-  showRequestInfo(resultIdTemplate);
-  removeRequestInfo();
-};
-
-const onError = (resultIdTemplate) => {
-  showRequestInfo(resultIdTemplate);
-  removeRequestInfo();
 };
 
 const setUserFormSubmit = () => {
@@ -142,10 +135,8 @@ const setUserFormSubmit = () => {
     if (pristine.validate()) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(onSuccess(infoRequestElement = ErrorIdTemplates.SUCCESS))
-        .catch(() => {
-          onError(infoRequestElement = ErrorIdTemplates.SEND_ERROR);
-        })
+        .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
+        .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
