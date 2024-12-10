@@ -1,6 +1,7 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
 import './validate-form.js';
+import { pristine } from './validate-form.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
@@ -18,9 +19,7 @@ const onDocumentKeydown = (evt) => {
 };
 
 const clearForm = () => {
-  imgUploadInput.value = '';
-  imgHashtags.value = '';
-  imgDescription.value = '';
+  imgUploadForm.reset();
 };
 
 function openUploadForm() {
@@ -35,9 +34,9 @@ function closeUploadForm() {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   imgUploadClose.removeEventListener('click', closeUploadForm);
+  pristine.reset();
   clearForm();
 }
 
 imgUploadInput.addEventListener('change', openUploadForm);
-
-export { imgUploadForm, imgHashtags };
+export { imgUploadForm, imgHashtags, closeUploadForm };

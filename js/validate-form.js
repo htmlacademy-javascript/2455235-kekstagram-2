@@ -1,11 +1,33 @@
 import { imgUploadForm, imgHashtags } from './open-form.js';
+import { sendData, ErrorIdTemplates } from './api.js';
+import { showRequestInfo } from './utils.js';
+import { body } from './open-full-photo.js';
+import { closeUploadForm } from './open-form.js';
+import { isEscapeKey } from './utils.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
+const submitButton = imgUploadForm.querySelector('.img-upload__submit');
+
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
+
+const RequestResultTags = {
+  error: {
+    SECTION: 'error',
+    BUTTON: 'error__button',
+    INNER: 'error__inner'
+  },
+  success: {
+    SECTION: 'success',
+    BUTTON: 'success__button',
+    INNER: 'success__inner'
+  }
+};
+
 let hashArray = [];
 let hashErrorMassege = [];
+let infoRequestElement;
 
 const checkHashErrors = () => [
   {
@@ -74,12 +96,52 @@ const commentErrorMassege = () =>
 
 const hashesErrorText = () => hashErrorMassege;
 
-pristine.addValidator(imgHashtags, validateHashtags,hashesErrorText);
+pristine.addValidator(imgHashtags, validateHashtags, hashesErrorText);
 pristine.addValidator(imgComments, validateComment, commentErrorMassege);
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    imgUploadForm.submit();
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+};
+
+const closeInfo = (evt) => {
+  if (
+    isEscapeKey(evt) ||
+    evt.target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
+    !evt.target.classList.contains(RequestResultTags[infoRequestElement].INNER)
+  ) {
+    const currentInfoSection = document.querySelector(`.${RequestResultTags[infoRequestElement].SECTION}`);
+    currentInfoSection.remove();
+    body.removeEventListener('click', closeInfo);
+    document.removeEventListener('keydown', closeInfo);
   }
-});
+};
+
+const appendInfo = (infoId) => {
+  if(infoId === 'success') {
+    closeUploadForm();
+  }
+  showRequestInfo(infoId);
+  body.addEventListener('click', closeInfo);
+  document.addEventListener('keydown', closeInfo);
+};
+
+const setUserFormSubmit = () => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
+        .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+setUserFormSubmit();
+
+export { pristine };

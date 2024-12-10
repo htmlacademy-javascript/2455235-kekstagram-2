@@ -1,12 +1,10 @@
 import { picturesContainer } from './render-photos.js';
 import {isEscapeKey} from './utils.js';
-import {renderFullPhoto, clearComments} from './render-full-photo.js';
-import { listPhotos } from './create-photos.js';
+import {clearComments} from './render-full-photo.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const body = document.body;
-
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -28,16 +26,19 @@ function closeFullPhoto() {
   clearComments();
 }
 
-picturesContainer.addEventListener('click', (evt) => {
-  const chosenPhoto = evt.target.closest('.picture');
-  if (chosenPhoto) {
-    evt.preventDefault();
-    const chosenPhotoID = chosenPhoto.getAttribute('data-id');
-    renderFullPhoto(chosenPhotoID, listPhotos);
-    openFullPhoto();
+const getBigPicture = (cb) => {
+  picturesContainer.addEventListener('click', (evt) => {
+    const chosenPhoto = evt.target.closest('.picture');
+    if (chosenPhoto) {
+      evt.preventDefault();
+      const chosenPhotoID = chosenPhoto.getAttribute('data-id');
+      openFullPhoto();
+      (cb(chosenPhotoID));
+    }
   }
-});
+  );
+};
 
 bigPictureClose.addEventListener('click', closeFullPhoto);
 
-export { body };
+export { body, closeFullPhoto, getBigPicture };
