@@ -58,7 +58,7 @@ const getCommentsToRender = (comments) => {
 };
 
 const renderFullPhoto = (chosenPhotoID, listPhotos) => {
-  const dataForBigPhoto = listPhotos.find((item) => item.id === chosenPhotoID);
+  const dataForBigPhoto = listPhotos.find((item) => item.id === parseInt(chosenPhotoID, 10));
   bigPictureImg.src = dataForBigPhoto.url;
   likesCount.textContent = dataForBigPhoto.likes;
   totalComments.textContent = dataForBigPhoto.comments.length;
