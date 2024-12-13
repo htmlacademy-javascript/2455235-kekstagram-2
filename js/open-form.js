@@ -1,6 +1,6 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
-import './validate-form.js';
+// import './validate-form.js';
 import { pristine } from './validate-form.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
