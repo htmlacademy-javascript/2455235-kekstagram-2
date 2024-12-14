@@ -4,7 +4,7 @@ import { isEscapeKey } from './utils.js';
 import { pristine } from './validate-form.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
-const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
+const imgUploadLabel = imgUploadForm.querySelector('.img-upload__label');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
 const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
@@ -38,5 +38,5 @@ function closeUploadForm() {
   clearForm();
 }
 
-imgUploadInput.addEventListener('change', openUploadForm);
+imgUploadLabel.addEventListener('click', openUploadForm);
 export { imgUploadForm, imgHashtags, closeUploadForm };
