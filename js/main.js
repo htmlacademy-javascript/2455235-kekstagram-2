@@ -7,6 +7,7 @@ import './effects-photo.js';
 import { getData, ErrorIdTemplates } from './api.js';
 import { showRequestInfoTimeout, debounce } from './utils.js';
 import { showFilters, setFilterClick } from './filters.js';
+import './upload-photo.js';
 
 const PHOTO_ITEMS_NUMBER = 25;
 const RERENDER_DELAY = 500;

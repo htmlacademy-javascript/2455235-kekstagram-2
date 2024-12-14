@@ -1,9 +1,7 @@
-// const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
-const BASE_URL = 'https://a4583caa5935373e.mokky.dev/html_keksogram';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
-  GET_DATA: '',
-  // GET_DATA: '/data',
+  GET_DATA: '/data',
   SEND_DATA: '/',
 };
 
