@@ -29,20 +29,22 @@ const comparePhotos = (photoA, photoB) => {
 };
 
 
-const getDataToRender = (photos, filter) => {
-  let arrayToRender = [];
+const getPhotosToRender = (photos, filter) => {
+  let photosToRender = [];
+  let copyPhotos = photos.slice();
   if (filter === 'filter-random') {
-    let newPhotos = photos.slice();
     for(let i = 0; i < PHOTO_NUMBERS_RANDOM; i++){
-      const randomPhotoIndex = getRandomInteger(0, newPhotos.length - 1);
-      arrayToRender.push(newPhotos[randomPhotoIndex]);
-      newPhotos = newPhotos.filter((item, index) => index !== randomPhotoIndex);
+      const randomPhotoIndex = getRandomInteger(0, copyPhotos.length - 1);
+      photosToRender.push(copyPhotos[randomPhotoIndex]);
+      copyPhotos = copyPhotos.filter((item, index) => index !== randomPhotoIndex);
     }
-    return arrayToRender;
-  } else if (filter === 'filter-popular') {
-    arrayToRender = photos.sort(comparePhotos).slice(0, PHOTO_NUMBERS_DEFAULT);
-    return arrayToRender;
+    return photosToRender;
+  } else if (filter === 'filter-discussed') {
+    photosToRender = copyPhotos.sort(comparePhotos).slice(0, PHOTO_NUMBERS_DEFAULT);
+    return photosToRender;
   }
+  photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
+  return photosToRender;
 };
 
 const deletePictures = () => {
@@ -51,9 +53,8 @@ const deletePictures = () => {
 };
 
 const renderThumbnails = (photos) => {
-  console.log(photos);
   deletePictures();
   picturesContainer.append(...photos.map((item) =>(createThumbnail(item))));
 };
 
-export {renderThumbnails, picturesContainer, deletePictures, getDataToRender};
+export {renderThumbnails, picturesContainer, deletePictures, getPhotosToRender};
