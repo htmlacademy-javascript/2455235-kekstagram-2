@@ -1,4 +1,5 @@
-import { renderThumbnails, getPhotosToRender } from './render-photos.js';
+import { renderThumbnails } from './render-photos.js';
+import { getPhotosToRender } from './filters.js';
 import { getBigPicture } from './open-full-photo.js';
 import { renderFullPhoto } from './render-full-photo.js';
 import {setUserFormSubmit} from './validate-form.js';

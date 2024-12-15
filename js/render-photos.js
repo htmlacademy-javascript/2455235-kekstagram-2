@@ -1,10 +1,7 @@
-import { findTemplate, getRandomInteger } from './utils.js';
+import { findTemplate } from './utils.js';
 
 const template = findTemplate('picture');
 const picturesContainer = document.querySelector('.pictures');
-
-const PHOTO_NUMBERS_DEFAULT = 25;
-const PHOTO_NUMBERS_RANDOM = 10;
 
 const createThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
@@ -20,24 +17,6 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-const getPhotosToRender = (photos, filter) => {
-  let photosToRender = [];
-  let copyPhotos = photos.slice();
-  if (filter === 'filter-random') {
-    for(let i = 0; i < PHOTO_NUMBERS_RANDOM; i++){
-      const randomPhotoIndex = getRandomInteger(0, copyPhotos.length - 1);
-      photosToRender.push(copyPhotos[randomPhotoIndex]);
-      copyPhotos = copyPhotos.filter((item, index) => index !== randomPhotoIndex);
-    }
-    return photosToRender;
-  } else if (filter === 'filter-discussed') {
-    photosToRender = copyPhotos.sort((a,b) => b.comments.length - a.comments.length).slice(0, PHOTO_NUMBERS_DEFAULT);
-    return photosToRender;
-  }
-  photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
-  return photosToRender;
-};
-
 const deletePictures = () => {
   const pictures = picturesContainer.querySelectorAll('.picture');
   pictures.forEach((picture) => picturesContainer.removeChild(picture));
@@ -48,4 +27,4 @@ const renderThumbnails = (photos) => {
   picturesContainer.append(...photos.map((item) =>(createThumbnail(item))));
 };
 
-export {renderThumbnails, picturesContainer, deletePictures, getPhotosToRender};
+export {renderThumbnails, picturesContainer, deletePictures};
