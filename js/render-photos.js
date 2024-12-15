@@ -20,15 +20,6 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-const getPhotoLikes = (photo) => photo.likes;
-
-const comparePhotos = (photoA, photoB) => {
-  const likesA = getPhotoLikes(photoA);
-  const likesB = getPhotoLikes(photoB);
-  return likesB - likesA;
-};
-
-
 const getPhotosToRender = (photos, filter) => {
   let photosToRender = [];
   let copyPhotos = photos.slice();
@@ -40,7 +31,7 @@ const getPhotosToRender = (photos, filter) => {
     }
     return photosToRender;
   } else if (filter === 'filter-discussed') {
-    photosToRender = copyPhotos.sort(comparePhotos).slice(0, PHOTO_NUMBERS_DEFAULT);
+    photosToRender = copyPhotos.sort((a,b) => b.comments.length - a.comments.length).slice(0, PHOTO_NUMBERS_DEFAULT);
     return photosToRender;
   }
   photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
