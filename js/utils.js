@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const DEBOUNCE_DELAY = 500;
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -46,14 +47,13 @@ const showRequestInfoTimeout = (templateId) => {
   }, ALERT_SHOW_TIME);
 };
 
-function debounce (callback, timeoutDelay = 500) {
+function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 }
-
 
 export {
   getRandomInteger,
