@@ -37,9 +37,12 @@ const showRequestInfo = (templateId) => {
 };
 
 
-const showRequestInfoTimeout = (templateId) => {
+const showRequestInfoTimeout = (templateId, message) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
+  if(message) {
+    errorElement.querySelector('.data-error__title').textContent = message;
+  }
   document.body.append(errorElement);
 
   setTimeout(() => {

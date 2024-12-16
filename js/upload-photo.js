@@ -1,6 +1,8 @@
 import { imgUploadForm } from './open-form.js';
+import { showRequestInfoTimeout } from './utils.js';
+import { ErrorIdTemplates } from './api.js';
 
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 
 const fileChooser = imgUploadForm.querySelector('.img-upload__input');
 
@@ -14,5 +16,7 @@ fileChooser.addEventListener('change', () => {
 
   if (matches) {
     imgPhotoPreview.src = URL.createObjectURL(file);
+  } else{
+    showRequestInfoTimeout(ErrorIdTemplates. LOAD_ERROR, 'Неверный тип файла');
   }
 });
