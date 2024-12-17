@@ -2,7 +2,6 @@ import { imgUploadForm, imgHashtags } from './open-form.js';
 import { sendData, ErrorIdTemplates } from './api.js';
 import { showRequestInfo } from './utils.js';
 import { body } from './open-full-photo.js';
-import { closeUploadForm } from './open-form.js';
 import { isEscapeKey } from './utils.js';
 
 const imgComments = imgUploadForm.querySelector('.text__description');
@@ -121,27 +120,23 @@ const closeInfo = (evt) => {
 };
 
 const appendInfo = (infoId) => {
-  if(infoId === 'success') {
-    closeUploadForm();
-  }
   showRequestInfo(infoId);
   body.addEventListener('click', closeInfo);
   document.addEventListener('keydown', closeInfo);
 };
 
-const setUserFormSubmit = () => {
+const setUserFormSubmit = (cb) => {
   imgUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
+        .then(() => cb())
         .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
 };
 
-setUserFormSubmit();
-
-export { pristine };
+export { pristine, setUserFormSubmit };

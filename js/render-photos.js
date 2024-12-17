@@ -17,8 +17,14 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
+const deletePictures = () => {
+  const pictures = picturesContainer.querySelectorAll('.picture');
+  pictures.forEach((picture) => picturesContainer.removeChild(picture));
+};
+
 const renderThumbnails = (photos) => {
+  deletePictures();
   picturesContainer.append(...photos.map((item) =>(createThumbnail(item))));
 };
 
-export {renderThumbnails, picturesContainer};
+export {renderThumbnails, picturesContainer, deletePictures};

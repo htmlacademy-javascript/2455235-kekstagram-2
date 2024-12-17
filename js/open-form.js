@@ -1,10 +1,9 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
-import './validate-form.js';
+// import './validate-form.js';
 import { pristine } from './validate-form.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
-const imgUploadInput = imgUploadForm.querySelector('.img-upload__input');
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
 const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
@@ -38,5 +37,4 @@ function closeUploadForm() {
   clearForm();
 }
 
-imgUploadInput.addEventListener('change', openUploadForm);
-export { imgUploadForm, imgHashtags, closeUploadForm };
+export { imgUploadForm, imgHashtags, closeUploadForm, openUploadForm };

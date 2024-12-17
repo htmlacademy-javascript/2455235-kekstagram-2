@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const DEBOUNCE_DELAY = 500;
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -36,15 +37,26 @@ const showRequestInfo = (templateId) => {
 };
 
 
-const showRequestInfoTimeout = (templateId) => {
+const showRequestInfoTimeout = (templateId, message) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
+  if(message) {
+    errorElement.querySelector('.data-error__title').textContent = message;
+  }
   document.body.append(errorElement);
 
   setTimeout(() => {
     errorElement.remove();
   }, ALERT_SHOW_TIME);
 };
+
+function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
 
 export {
   getRandomInteger,
@@ -54,4 +66,5 @@ export {
   isEnterKey,
   showRequestInfo,
   showRequestInfoTimeout,
+  debounce
 };

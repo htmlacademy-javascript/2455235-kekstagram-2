@@ -7,6 +7,7 @@ const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview');
 const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
 const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
 const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
+const sliderContainer = imgUploadForm.querySelector('.img-upload__effect-level');
 
 
 const SCALE_STEP = 25;
@@ -60,7 +61,7 @@ const ScaleAction = {
   DECREASE: '-'
 };
 
-sliderElement.classList.add('hidden');
+sliderContainer.classList.add('hidden');
 
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
@@ -110,12 +111,12 @@ effectsRadioButtons.forEach((button) =>{
   button.addEventListener('change', (evt) => {
     imgUploadPreview.style.filter = 'unset';
     if (evt.target.value !== 'none') {
-      sliderElement.classList.remove('hidden');
+      sliderContainer.classList.remove('hidden');
       const effect = evt.target.value;
       effectLevelValue.setAttribute('data-effect', effect);
       updateSliderData(effect);
     } else if (evt.target.value === 'none') {
-      sliderElement.classList.add('hidden');
+      sliderContainer.classList.add('hidden');
     }
   });
 });
