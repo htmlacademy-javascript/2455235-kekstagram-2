@@ -130,7 +130,7 @@ const setUserFormSubmit = (cb) => {
     evt.preventDefault();
     if (pristine.validate()) {
       blockSubmitButton();
-      sendData('new FormData(evt.target)')
+      sendData(new FormData(evt.target))
         .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
         .then(() => cb())
         .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
