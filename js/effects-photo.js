@@ -1,9 +1,9 @@
-import { imgUploadForm } from './open-form.js';
+// import { imgUploadForm, scaleValue } from './open-form.js';
 
+const imgUploadForm = document.querySelector('.img-upload__form');
+const scaleValue = imgUploadForm.querySelector('.scale__control--value');
 const scale = imgUploadForm.querySelector('.scale');
-
-const scaleValue = scale.querySelector('.scale__control--value');
-const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview');
+const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
 const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
 const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
 const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
@@ -122,9 +122,15 @@ effectsRadioButtons.forEach((button) =>{
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  effectLevelValue.value = sliderElement.noUiSlider.get();
+  effectLevelValue.value = parseFloat(sliderElement.noUiSlider.get());
   if(effectLevelValue.dataset.effect) {
     const effect = FILTER_EFFECTS[effectLevelValue.dataset.effect];
     changePhotoStyle(effect);
   }
 });
+
+const removeScaleChanges = () => {
+  scaleValue.setAttribute('value', `${ScaleMaxMin.SCALE_MAX}`);
+  imgUploadPreview.style.transform = 'scale(1)';
+};
+export {removeScaleChanges, imgUploadForm, scaleValue};
