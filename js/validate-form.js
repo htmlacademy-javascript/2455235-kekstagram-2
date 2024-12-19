@@ -1,9 +1,10 @@
-import { imgUploadForm, imgHashtags } from './open-form.js';
+import { imgUploadForm } from './effects-photo.js';
 import { sendData, ErrorIdTemplates } from './api.js';
 import { showRequestInfo } from './utils.js';
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
 
+const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
@@ -76,7 +77,7 @@ function validateHashtags(value) {
   if (!value) {
     return true;
   }
-  hashArray = value.trim().toLowerCase().split(' ');
+  hashArray = value.trim().toLowerCase().split(' ').filter(Boolean);
   checkHashErrors().map((errorHash) => {
     if (errorHash.check) {
       hashErrorMassege.push(errorHash.error);
@@ -107,8 +108,7 @@ const unblockSubmitButton = () => {
 };
 
 const closeInfo = (evt) => {
-  if (
-    isEscapeKey(evt) ||
+  if ((isEscapeKey(evt) && infoRequestElement !== 'error') ||
     evt.target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
     !evt.target.classList.contains(RequestResultTags[infoRequestElement].INNER)
   ) {
@@ -132,11 +132,11 @@ const setUserFormSubmit = (cb) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
-        .then(() => cb())
+        .then(() => cb(infoRequestElement))
         .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
 };
 
-export { pristine, setUserFormSubmit };
+export { pristine, setUserFormSubmit, infoRequestElement, imgHashtags };

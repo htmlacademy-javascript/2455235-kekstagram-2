@@ -35,7 +35,7 @@ const renderComments = (nextComments) => {
 };
 
 const disableShowcomments = (commentsLength) => {
-  buttonMoreComments.disabled = true;
+  buttonMoreComments.classList.add('hidden');
   shownComments.textContent = commentsLength;
 };
 
@@ -73,7 +73,7 @@ buttonMoreComments.addEventListener('click', () => {
 
 const clearComments = () => {
   commentsList.innerHTML = '';
-  buttonMoreComments.disabled = false;
+  buttonMoreComments.classList.remove('hidden');
   commentsData = [];
   indexCounter = 0;
 };

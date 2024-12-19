@@ -1,5 +1,3 @@
-// import { imgUploadForm, scaleValue } from './open-form.js';
-
 const imgUploadForm = document.querySelector('.img-upload__form');
 const scaleValue = imgUploadForm.querySelector('.scale__control--value');
 const scale = imgUploadForm.querySelector('.scale');

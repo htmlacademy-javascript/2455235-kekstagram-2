@@ -24,6 +24,8 @@ const showFilters = () => filters.classList.remove('img-filters--inactive');
 let dataFilterId;
 let photos = [];
 
+const debounceRender = debounce(renderThumbnails);
+
 const getPhotosToRender = (filter) => {
   let photosToRender = [];
   const copyPhotos = photos.slice();
@@ -38,7 +40,7 @@ const getPhotosToRender = (filter) => {
       photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
       break;
   }
-  debounce(renderThumbnails(photosToRender));
+  debounceRender(photosToRender);
 };
 
 const setFilterClick = (evt) => {
