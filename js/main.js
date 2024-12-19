@@ -1,5 +1,4 @@
 import { renderThumbnails } from './render-photos.js';
-// import { getPhotosToRender } from './filters.js';
 import { getBigPicture } from './open-full-photo.js';
 import { renderFullPhoto } from './render-full-photo.js';
 import {setUserFormSubmit} from './validate-form.js';
@@ -11,7 +10,6 @@ import { showFilters, setFilters } from './filters.js';
 import './upload-photo.js';
 
 const PHOTO_ITEMS_NUMBER = 25;
-// const RERENDER_DELAY = 500;
 
 getData()
   .then((photos) => {

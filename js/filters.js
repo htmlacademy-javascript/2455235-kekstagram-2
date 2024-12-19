@@ -24,17 +24,23 @@ const showFilters = () => filters.classList.remove('img-filters--inactive');
 let dataFilterId;
 let photos = [];
 
+const debounceRender = debounce(renderThumbnails);
+
 const getPhotosToRender = (filter) => {
   let photosToRender = [];
   const copyPhotos = photos.slice();
-  if (filter === FILTERS.random) {
-    photosToRender = copyPhotos.sort(SORT_FUNCTIONS.random).slice(0, PHOTO_NUMBERS_RANDOM);
-  } else if (filter === FILTERS.discussed) {
-    photosToRender = copyPhotos.sort(SORT_FUNCTIONS.discussed).slice(0, PHOTO_NUMBERS_DEFAULT);
-  } else{
-    photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
+  switch (filter) {
+    case FILTERS.random:
+      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.random).slice(0, PHOTO_NUMBERS_RANDOM);
+      break;
+    case FILTERS.discussed:
+      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.discussed).slice(0, PHOTO_NUMBERS_DEFAULT);
+      break;
+    case FILTERS.default:
+      photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
+      break;
   }
-  debounce(renderThumbnails(photosToRender));
+  debounceRender(photosToRender);
 };
 
 const setFilterClick = (evt) => {
