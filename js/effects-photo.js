@@ -1,13 +1,3 @@
-const imgUploadForm = document.querySelector('.img-upload__form');
-const scaleValue = imgUploadForm.querySelector('.scale__control--value');
-const scale = imgUploadForm.querySelector('.scale');
-const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
-const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
-const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
-const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
-const sliderContainer = imgUploadForm.querySelector('.img-upload__effect-level');
-
-
 const SCALE_STEP = 25;
 
 const ScaleMaxMin = {
@@ -21,36 +11,36 @@ const SliderDefaultValues = {
   SLIDER_START: 100
 };
 
-const FILTER_EFFECTS = {
-  chrome: {
-    filter: 'grayscale',
-    unit: '',
-    range: [0, 1],
-    step: 0.1,
+const FilterEffects = {
+  CHROME:{
+    FILTER: 'grayscale',
+    UNIT: '',
+    RANGE: [0, 1],
+    STEP: 0.1,
   },
-  sepia: {
-    filter: 'sepia',
-    unit: '',
-    range: [0, 1],
-    step: 0.1,
+  SEPIA: {
+    FILTER: 'sepia',
+    UNIT: '',
+    RANGE: [0, 1],
+    STEP: 0.1,
   },
-  marvin: {
-    filter: 'invert',
-    unit: '%',
-    range: [0, 100],
-    step: 1,
+  MARVIN: {
+    FILTER: 'invert',
+    UNIT: '%',
+    RANGE: [0, 100],
+    STEP: 1,
   },
-  phobos: {
-    filter: 'blur',
-    unit: 'px',
-    range: [0, 3],
-    step: 0.1,
+  PHOBOS: {
+    FILTER: 'blur',
+    UNIT: 'px',
+    RANGE: [0, 3],
+    STEP: 0.1,
   },
-  heat: {
-    filter: 'brightness',
-    range: [1, 3],
-    unit: '',
-    step: 0.1,
+  HEAT: {
+    FILTER: 'brightness',
+    UNIT: '',
+    RANGE: [1, 3],
+    STEP: 0.1,
   },
 };
 
@@ -58,6 +48,15 @@ const ScaleAction = {
   INCREASE: '+',
   DECREASE: '-'
 };
+
+const imgUploadForm = document.querySelector('.img-upload__form');
+const scaleValue = imgUploadForm.querySelector('.scale__control--value');
+const scale = imgUploadForm.querySelector('.scale');
+const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
+const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
+const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
+const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
+const sliderContainer = imgUploadForm.querySelector('.img-upload__effect-level');
 
 sliderContainer.classList.add('hidden');
 
@@ -91,18 +90,19 @@ noUiSlider.create(sliderElement, {
 });
 
 const updateSliderData = (effect) => {
+  const effectInFilters = effect.toUpperCase();
   sliderElement.noUiSlider.updateOptions({
     range: {
-      min: FILTER_EFFECTS[effect].range[0],
-      max: FILTER_EFFECTS[effect].range[1]
+      min: FilterEffects[effectInFilters].RANGE[0],
+      max: FilterEffects[effectInFilters].RANGE[1]
     },
-    start: FILTER_EFFECTS[effect].range[1],
-    step: FILTER_EFFECTS[effect].step
+    start: FilterEffects[effectInFilters].RANGE[1],
+    step: FilterEffects[effectInFilters].STEP
   });
 };
 
 const changePhotoStyle = (effect) => {
-  imgUploadPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
+  imgUploadPreview.style.filter = `${effect.FILTER}(${effectLevelValue.value.trim()}${effect.UNIT})`;
 };
 
 effectsRadioButtons.forEach((button) =>{
@@ -122,7 +122,7 @@ effectsRadioButtons.forEach((button) =>{
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = parseFloat(sliderElement.noUiSlider.get());
   if(effectLevelValue.dataset.effect) {
-    const effect = FILTER_EFFECTS[effectLevelValue.dataset.effect];
+    const effect = FilterEffects[effectLevelValue.dataset.effect.toUpperCase()];
     changePhotoStyle(effect);
   }
 });
@@ -131,4 +131,4 @@ const removeScaleChanges = () => {
   scaleValue.setAttribute('value', `${ScaleMaxMin.SCALE_MAX}`);
   imgUploadPreview.style.transform = 'scale(1)';
 };
-export {removeScaleChanges, imgUploadForm, scaleValue};
+export {removeScaleChanges, imgUploadForm };

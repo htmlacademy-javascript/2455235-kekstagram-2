@@ -1,20 +1,6 @@
 const ALERT_SHOW_TIME = 5000;
 const DEBOUNCE_DELAY = 500;
 
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-function getIndexIncrement() {
-  let count = 0;
-  return function () {
-    return ++count;
-  };
-}
-
 const findTemplate = (id) => {
   const template = document.getElementById(id);
   if (!template) {
@@ -27,8 +13,6 @@ const findTemplate = (id) => {
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
-
-const isEnterKey = (evt) => evt.key === 'Enter';
 
 const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
@@ -59,11 +43,8 @@ function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
 }
 
 export {
-  getRandomInteger,
-  getIndexIncrement,
   findTemplate,
   isEscapeKey,
-  isEnterKey,
   showRequestInfo,
   showRequestInfoTimeout,
   debounce

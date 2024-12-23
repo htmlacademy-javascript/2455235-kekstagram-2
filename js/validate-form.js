@@ -4,10 +4,6 @@ import { showRequestInfo } from './utils.js';
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
 
-const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
-const imgComments = imgUploadForm.querySelector('.text__description');
-const submitButton = imgUploadForm.querySelector('.img-upload__submit');
-
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
@@ -24,6 +20,10 @@ const RequestResultTags = {
     INNER: 'success__inner'
   }
 };
+
+const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
+const imgComments = imgUploadForm.querySelector('.text__description');
+const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
 let hashArray = [];
 let hashErrorMassege = [];
@@ -107,13 +107,20 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
+const removeInfoWindow = (infoElement) =>{
+  const currentInfoSection = document.querySelector(`.${RequestResultTags[infoElement].SECTION}`);
+  currentInfoSection.remove();
+};
+
 const closeInfo = (evt) => {
-  if ((isEscapeKey(evt) && infoRequestElement !== 'error') ||
-    evt.target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
-    !evt.target.classList.contains(RequestResultTags[infoRequestElement].INNER)
-  ) {
-    const currentInfoSection = document.querySelector(`.${RequestResultTags[infoRequestElement].SECTION}`);
-    currentInfoSection.remove();
+  const target = evt.target;
+  if ((isEscapeKey(evt) && infoRequestElement === 'error')) {
+    evt.stopPropagation();
+    removeInfoWindow(infoRequestElement);
+  } else if (isEscapeKey(evt) ||
+  target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
+  !target.classList.contains(RequestResultTags[infoRequestElement].INNER)) {
+    removeInfoWindow(infoRequestElement);
     body.removeEventListener('click', closeInfo);
     document.removeEventListener('keydown', closeInfo);
   }
@@ -122,7 +129,7 @@ const closeInfo = (evt) => {
 const appendInfo = (infoId) => {
   showRequestInfo(infoId);
   body.addEventListener('click', closeInfo);
-  document.addEventListener('keydown', closeInfo);
+  body.addEventListener('keydown', closeInfo);
 };
 
 const setUserFormSubmit = (cb) => {
@@ -132,11 +139,11 @@ const setUserFormSubmit = (cb) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
-        .then(() => cb(infoRequestElement))
+        .then(() => cb())
         .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
 };
 
-export { pristine, setUserFormSubmit, infoRequestElement, imgHashtags };
+export { pristine, setUserFormSubmit, imgHashtags };

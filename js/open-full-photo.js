@@ -1,6 +1,6 @@
 import { picturesContainer } from './render-photos.js';
-import {isEscapeKey} from './utils.js';
-import {clearComments} from './render-full-photo.js';
+import { isEscapeKey } from './utils.js';
+import { clearComments } from './render-full-photo.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
@@ -9,17 +9,17 @@ const body = document.body;
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeFullPhoto();
+    closeBigPhoto();
   }
 };
 
-function openFullPhoto() {
+function openBigPhoto() {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 }
 
-function closeFullPhoto() {
+function closeBigPhoto() {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -32,13 +32,12 @@ const getBigPicture = (cb) => {
     if (chosenPhoto) {
       evt.preventDefault();
       const chosenPhotoID = chosenPhoto.getAttribute('data-id');
-      openFullPhoto();
-      (cb(chosenPhotoID));
+      openBigPhoto();
+      cb(chosenPhotoID);
     }
-  }
-  );
+  });
 };
 
-bigPictureClose.addEventListener('click', closeFullPhoto);
+bigPictureClose.addEventListener('click', closeBigPhoto);
 
-export { body, closeFullPhoto, getBigPicture };
+export { body, closeBigPhoto, getBigPicture };

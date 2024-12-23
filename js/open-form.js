@@ -1,15 +1,14 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
-import { pristine, infoRequestElement, imgHashtags } from './validate-form.js';
-import { removeScaleChanges, imgUploadForm, scaleValue } from './effects-photo.js';
+import { pristine, imgHashtags } from './validate-form.js';
+import { removeScaleChanges, imgUploadForm } from './effects-photo.js';
 
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
-
 const imgDescription = imgUploadForm.querySelector('.text__description');
 
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription && infoRequestElement !== 'error') {
+  if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription) {
     evt.preventDefault();
     closeUploadForm();
   }
@@ -36,4 +35,4 @@ function closeUploadForm() {
   removeScaleChanges();
 }
 
-export { imgUploadForm, imgHashtags, closeUploadForm, openUploadForm, scaleValue };
+export { imgUploadForm, closeUploadForm, openUploadForm };

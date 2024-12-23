@@ -1,9 +1,6 @@
 import { renderThumbnails } from './render-photos.js';
 import { debounce } from './utils.js';
 
-const filters = document.querySelector('.img-filters');
-const filtersButtons = filters.querySelectorAll('.img-filters__button');
-
 const FILTERS = {
   default: 'filter-default',
   random: 'filter-random',
@@ -19,10 +16,13 @@ const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
 const PHOTO_NUMBERS_DEFAULT = 25;
 const PHOTO_NUMBERS_RANDOM = 10;
 
-const showFilters = () => filters.classList.remove('img-filters--inactive');
+const filters = document.querySelector('.img-filters');
+const filtersButtons = filters.querySelectorAll('.img-filters__button');
 
 let dataFilterId;
 let photos = [];
+
+const showFilters = () => filters.classList.remove('img-filters--inactive');
 
 const debounceRender = debounce(renderThumbnails);
 
@@ -58,4 +58,4 @@ const setFilters = (photosData) => {
   photos = photosData;
 };
 
-export { showFilters, setFilters, getPhotosToRender };
+export { showFilters, setFilters };
