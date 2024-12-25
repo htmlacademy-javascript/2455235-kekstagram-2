@@ -9,15 +9,15 @@ const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
 
 const RequestResultTags = {
-  error: {
-    SECTION: 'error',
-    BUTTON: 'error__button',
-    INNER: 'error__inner'
+  ERROR: {
+    section: 'error',
+    button: 'error__button',
+    inner: 'error__inner'
   },
-  success: {
-    SECTION: 'success',
-    BUTTON: 'success__button',
-    INNER: 'success__inner'
+  SUCCESS: {
+    section: 'success',
+    button: 'success__button',
+    inner: 'success__inner'
   }
 };
 
@@ -72,7 +72,7 @@ const pristine = new Pristine(
   false
 );
 
-function validateHashtags(value) {
+const validateHashtags = (value) => {
   hashErrorMassege = [];
   if (!value) {
     return true;
@@ -85,11 +85,9 @@ function validateHashtags(value) {
     return hashErrorMassege;
   });
   return hashErrorMassege.length === 0;
-}
+};
 
-function validateComment(value) {
-  return value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
-}
+const validateComment = (value) => value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
 
 const commentErrorMassege = () =>
   `максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
@@ -108,18 +106,19 @@ const unblockSubmitButton = () => {
 };
 
 const removeInfoWindow = (infoElement) =>{
-  const currentInfoSection = document.querySelector(`.${RequestResultTags[infoElement].SECTION}`);
+  const currentInfoSection = document.querySelector(`.${RequestResultTags[infoElement].section}`);
   currentInfoSection.remove();
 };
 
 const closeInfo = (evt) => {
   const target = evt.target;
-  if ((isEscapeKey(evt) && infoRequestElement === 'error')) {
+  infoRequestElement = infoRequestElement.toUpperCase();
+  if ((isEscapeKey(evt) && infoRequestElement.toLowerCase() === 'error')) {
     evt.stopPropagation();
     removeInfoWindow(infoRequestElement);
   } else if (isEscapeKey(evt) ||
-  target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
-  !target.classList.contains(RequestResultTags[infoRequestElement].INNER)) {
+  target.classList.contains(RequestResultTags[infoRequestElement].button) ||
+  !target.classList.contains(RequestResultTags[infoRequestElement].inner)) {
     removeInfoWindow(infoRequestElement);
     body.removeEventListener('click', closeInfo);
     document.removeEventListener('keydown', closeInfo);

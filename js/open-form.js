@@ -10,7 +10,7 @@ const imgDescription = imgUploadForm.querySelector('.text__description');
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription) {
     evt.preventDefault();
-    closeUploadForm();
+    onUploadCloseClick();
   }
 };
 
@@ -18,21 +18,21 @@ const clearForm = () => {
   imgUploadForm.reset();
 };
 
-function openUploadForm() {
+const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-  imgUploadClose.addEventListener('click', closeUploadForm);
-}
+  imgUploadClose.addEventListener('click', onUploadCloseClick);
+};
 
-function closeUploadForm() {
+function onUploadCloseClick() {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  imgUploadClose.removeEventListener('click', closeUploadForm);
+  imgUploadClose.removeEventListener('click', onUploadCloseClick);
   pristine.reset();
   clearForm();
   removeScaleChanges();
 }
 
-export { imgUploadForm, closeUploadForm, openUploadForm };
+export { imgUploadForm, onUploadCloseClick, openUploadForm };

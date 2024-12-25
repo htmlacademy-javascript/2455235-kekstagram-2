@@ -43,7 +43,7 @@ const getPhotosToRender = (filter) => {
   debounceRender(photosToRender);
 };
 
-const setFilterClick = (evt) => {
+const onFilterClick = (evt) => {
   if(evt.target.classList.contains('img-filters__button') && !evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {
     filtersButtons.forEach((button) => button.classList.remove(ACTIVE_BUTTON_CLASS));
     const currentFilter = evt.target;
@@ -54,7 +54,7 @@ const setFilterClick = (evt) => {
 };
 
 const setFilters = (photosData) => {
-  filters.addEventListener('click', setFilterClick);
+  filters.addEventListener('click', onFilterClick);
   photos = photosData;
 };
 

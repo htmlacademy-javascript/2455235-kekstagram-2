@@ -1,8 +1,7 @@
 import { renderThumbnails } from './render-photos.js';
-import { getBigPicture } from './open-full-photo.js';
-import { renderFullPhoto } from './render-full-photo.js';
-import {setUserFormSubmit} from './validate-form.js';
-import {closeUploadForm} from './open-form.js';
+import { getBigPicture, renderFullPhoto } from './open-full-photo.js';
+import { setUserFormSubmit } from './validate-form.js';
+import { onUploadCloseClick } from './open-form.js';
 import './effects-photo.js';
 import { getData, ErrorIdTemplates } from './api.js';
 import { showRequestInfoTimeout } from './utils.js';
@@ -23,4 +22,4 @@ getData()
     showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR);
   });
 
-setUserFormSubmit(closeUploadForm);
+setUserFormSubmit(onUploadCloseClick);
