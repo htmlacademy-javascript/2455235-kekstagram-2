@@ -1,55 +1,45 @@
-const imgUploadForm = document.querySelector('.img-upload__form');
-const scaleValue = imgUploadForm.querySelector('.scale__control--value');
-const scale = imgUploadForm.querySelector('.scale');
-const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
-const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
-const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
-const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
-const sliderContainer = imgUploadForm.querySelector('.img-upload__effect-level');
-
-
 const SCALE_STEP = 25;
 
-const ScaleMaxMin = {
-  SCALE_MIN: '25%',
-  SCALE_MAX: '100%',
+const ScaleExtremums = {
+  MIN: '25%',
+  MAX: '100%',
 };
 
 const SliderDefaultValues = {
-  SLIDER_MIN: 0,
-  SLIDER_MAX: 100,
-  SLIDER_START: 100
+  MIN: 0,
+  MAX: 100,
+  START: 100
 };
 
-const FILTER_EFFECTS = {
-  chrome: {
+const FilterEffects = {
+  CHROME:{
     filter: 'grayscale',
     unit: '',
     range: [0, 1],
     step: 0.1,
   },
-  sepia: {
+  SEPIA: {
     filter: 'sepia',
     unit: '',
     range: [0, 1],
     step: 0.1,
   },
-  marvin: {
+  MARVIN: {
     filter: 'invert',
     unit: '%',
     range: [0, 100],
     step: 1,
   },
-  phobos: {
+  PHOBOS: {
     filter: 'blur',
     unit: 'px',
     range: [0, 3],
     step: 0.1,
   },
-  heat: {
+  HEAT: {
     filter: 'brightness',
-    range: [1, 3],
     unit: '',
+    range: [1, 3],
     step: 0.1,
   },
 };
@@ -58,6 +48,15 @@ const ScaleAction = {
   INCREASE: '+',
   DECREASE: '-'
 };
+
+const imgUploadForm = document.querySelector('.img-upload__form');
+const scaleValue = imgUploadForm.querySelector('.scale__control--value');
+const scale = imgUploadForm.querySelector('.scale');
+const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
+const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
+const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
+const sliderElement = imgUploadForm.querySelector('.effect-level__slider');
+const sliderContainer = imgUploadForm.querySelector('.img-upload__effect-level');
 
 sliderContainer.classList.add('hidden');
 
@@ -71,12 +70,12 @@ const changePhotoSize = (action, scaleData) => {
 scale.addEventListener('click', (evt) => {
   if (
     evt.target.classList.contains('scale__control--smaller') &&
-    scaleValue.value !== ScaleMaxMin.SCALE_MIN
+    scaleValue.value !== ScaleExtremums.MIN
   ) {
     changePhotoSize(ScaleAction.DECREASE, parseInt(scaleValue.value, 10));
   } else if (
     evt.target.classList.contains('scale__control--bigger') &&
-    scaleValue.value !== ScaleMaxMin.SCALE_MAX
+    scaleValue.value !== ScaleExtremums.MAX
   ) {
     changePhotoSize(ScaleAction.INCREASE, parseInt(scaleValue.value, 10));
   }
@@ -84,20 +83,21 @@ scale.addEventListener('click', (evt) => {
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: SliderDefaultValues.SLIDER_MIN,
-    max: SliderDefaultValues.SLIDER_MAX,
+    min: SliderDefaultValues.MIN,
+    max: SliderDefaultValues.MAX,
   },
-  start: SliderDefaultValues.SLIDER_START
+  start: SliderDefaultValues.START
 });
 
 const updateSliderData = (effect) => {
+  const effectInFilters = effect.toUpperCase();
   sliderElement.noUiSlider.updateOptions({
     range: {
-      min: FILTER_EFFECTS[effect].range[0],
-      max: FILTER_EFFECTS[effect].range[1]
+      min: FilterEffects[effectInFilters].range[0],
+      max: FilterEffects[effectInFilters].range[1]
     },
-    start: FILTER_EFFECTS[effect].range[1],
-    step: FILTER_EFFECTS[effect].step
+    start: FilterEffects[effectInFilters].range[1],
+    step: FilterEffects[effectInFilters].step
   });
 };
 
@@ -122,13 +122,13 @@ effectsRadioButtons.forEach((button) =>{
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = parseFloat(sliderElement.noUiSlider.get());
   if(effectLevelValue.dataset.effect) {
-    const effect = FILTER_EFFECTS[effectLevelValue.dataset.effect];
+    const effect = FilterEffects[effectLevelValue.dataset.effect.toUpperCase()];
     changePhotoStyle(effect);
   }
 });
 
 const removeScaleChanges = () => {
-  scaleValue.setAttribute('value', `${ScaleMaxMin.SCALE_MAX}`);
+  scaleValue.setAttribute('value', `${ScaleExtremums.MAX}`);
   imgUploadPreview.style.transform = 'scale(1)';
 };
-export {removeScaleChanges, imgUploadForm, scaleValue};
+export {removeScaleChanges, imgUploadForm };

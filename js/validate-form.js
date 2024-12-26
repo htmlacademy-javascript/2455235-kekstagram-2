@@ -4,26 +4,26 @@ import { showRequestInfo } from './utils.js';
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
 
-const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
-const imgComments = imgUploadForm.querySelector('.text__description');
-const submitButton = imgUploadForm.querySelector('.img-upload__submit');
-
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
 const MAX_NUMBER_HASHES = 5;
 
 const RequestResultTags = {
-  error: {
-    SECTION: 'error',
-    BUTTON: 'error__button',
-    INNER: 'error__inner'
+  ERROR: {
+    section: 'error',
+    button: 'error__button',
+    inner: 'error__inner'
   },
-  success: {
-    SECTION: 'success',
-    BUTTON: 'success__button',
-    INNER: 'success__inner'
+  SUCCESS: {
+    section: 'success',
+    button: 'success__button',
+    inner: 'success__inner'
   }
 };
+
+const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
+const imgComments = imgUploadForm.querySelector('.text__description');
+const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
 let hashArray = [];
 let hashErrorMassege = [];
@@ -72,7 +72,7 @@ const pristine = new Pristine(
   false
 );
 
-function validateHashtags(value) {
+const validateHashtags = (value) => {
   hashErrorMassege = [];
   if (!value) {
     return true;
@@ -85,11 +85,9 @@ function validateHashtags(value) {
     return hashErrorMassege;
   });
   return hashErrorMassege.length === 0;
-}
+};
 
-function validateComment(value) {
-  return value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
-}
+const validateComment = (value) => value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
 
 const commentErrorMassege = () =>
   `максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
@@ -107,22 +105,38 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
-const closeInfo = (evt) => {
-  if ((isEscapeKey(evt) && infoRequestElement !== 'error') ||
-    evt.target.classList.contains(RequestResultTags[infoRequestElement].BUTTON) ||
-    !evt.target.classList.contains(RequestResultTags[infoRequestElement].INNER)
-  ) {
-    const currentInfoSection = document.querySelector(`.${RequestResultTags[infoRequestElement].SECTION}`);
-    currentInfoSection.remove();
-    body.removeEventListener('click', closeInfo);
-    document.removeEventListener('keydown', closeInfo);
+const checkIsInfo = () => {
+  infoRequestElement = infoRequestElement.toUpperCase();
+  return document.querySelector(`.${RequestResultTags[infoRequestElement].section}`);
+};
+
+const onBodyClick = (evt) => {
+  const isInfo = checkIsInfo();
+  if(!isInfo) {
+    return;
   }
+  if (evt.target.classList.contains(RequestResultTags[infoRequestElement].button) || !evt.target.classList.contains(RequestResultTags[infoRequestElement].inner)) {
+    isInfo.remove();
+    body.removeEventListener('click', onBodyClick);
+  }
+};
+
+const onBodyKeydown = (evt) => {
+  const isInfo = checkIsInfo();
+  if(!isInfo && !isEscapeKey(evt)) {
+    return;
+  }
+  if(infoRequestElement.toLowerCase() === 'error') {
+    evt.stopPropagation();
+  }
+  isInfo.remove();
+  body.removeEventListener('keydown', onBodyKeydown);
 };
 
 const appendInfo = (infoId) => {
   showRequestInfo(infoId);
-  body.addEventListener('click', closeInfo);
-  document.addEventListener('keydown', closeInfo);
+  body.addEventListener('click', onBodyClick);
+  body.addEventListener('keydown', onBodyKeydown);
 };
 
 const setUserFormSubmit = (cb) => {
@@ -132,11 +146,11 @@ const setUserFormSubmit = (cb) => {
       blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
-        .then(() => cb(infoRequestElement))
+        .then(() => cb())
         .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
 };
 
-export { pristine, setUserFormSubmit, infoRequestElement, imgHashtags };
+export { pristine, setUserFormSubmit, imgHashtags };

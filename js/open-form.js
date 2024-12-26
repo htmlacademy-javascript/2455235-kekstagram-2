@@ -1,17 +1,16 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
-import { pristine, infoRequestElement, imgHashtags } from './validate-form.js';
-import { removeScaleChanges, imgUploadForm, scaleValue } from './effects-photo.js';
+import { pristine, imgHashtags } from './validate-form.js';
+import { removeScaleChanges, imgUploadForm } from './effects-photo.js';
 
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
-
 const imgDescription = imgUploadForm.querySelector('.text__description');
 
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription && infoRequestElement !== 'error') {
+  if (isEscapeKey(evt) && document.activeElement !== imgHashtags && document.activeElement !== imgDescription) {
     evt.preventDefault();
-    closeUploadForm();
+    onUploadCloseClick();
   }
 };
 
@@ -19,21 +18,21 @@ const clearForm = () => {
   imgUploadForm.reset();
 };
 
-function openUploadForm() {
+const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-  imgUploadClose.addEventListener('click', closeUploadForm);
-}
+  imgUploadClose.addEventListener('click', onUploadCloseClick);
+};
 
-function closeUploadForm() {
+function onUploadCloseClick() {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  imgUploadClose.removeEventListener('click', closeUploadForm);
+  imgUploadClose.removeEventListener('click', onUploadCloseClick);
   pristine.reset();
   clearForm();
   removeScaleChanges();
 }
 
-export { imgUploadForm, imgHashtags, closeUploadForm, openUploadForm, scaleValue };
+export { imgUploadForm, onUploadCloseClick, openUploadForm };
