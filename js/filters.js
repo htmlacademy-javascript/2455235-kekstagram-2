@@ -1,10 +1,10 @@
 import { renderThumbnails } from './render-photos.js';
 import { debounce } from './utils.js';
 
-const FILTERS = {
-  default: 'filter-default',
-  random: 'filter-random',
-  discussed: 'filter-discussed'
+const Filters = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
 };
 
 const SORT_FUNCTIONS = {
@@ -30,13 +30,13 @@ const getPhotosToRender = (filter) => {
   let photosToRender = [];
   const copyPhotos = photos.slice();
   switch (filter) {
-    case FILTERS.random:
+    case Filters.RANDOM:
       photosToRender = copyPhotos.sort(SORT_FUNCTIONS.random).slice(0, PHOTO_NUMBERS_RANDOM);
       break;
-    case FILTERS.discussed:
+    case Filters.DISCUSSED:
       photosToRender = copyPhotos.sort(SORT_FUNCTIONS.discussed).slice(0, PHOTO_NUMBERS_DEFAULT);
       break;
-    case FILTERS.default:
+    case Filters.DEFAULT:
       photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);
       break;
   }
