@@ -105,30 +105,38 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
-const removeInfoWindow = (infoElement) =>{
-  const currentInfoSection = document.querySelector(`.${RequestResultTags[infoElement].section}`);
-  currentInfoSection.remove();
+const checkIsInfo = () => {
+  infoRequestElement = infoRequestElement.toUpperCase();
+  return document.querySelector(`.${RequestResultTags[infoRequestElement].section}`);
 };
 
-const closeInfo = (evt) => {
-  const target = evt.target;
-  infoRequestElement = infoRequestElement.toUpperCase();
-  if ((isEscapeKey(evt) && infoRequestElement.toLowerCase() === 'error')) {
-    evt.stopPropagation();
-    removeInfoWindow(infoRequestElement);
-  } else if (isEscapeKey(evt) ||
-  target.classList.contains(RequestResultTags[infoRequestElement].button) ||
-  !target.classList.contains(RequestResultTags[infoRequestElement].inner)) {
-    removeInfoWindow(infoRequestElement);
-    body.removeEventListener('click', closeInfo);
-    document.removeEventListener('keydown', closeInfo);
+const onBodyClick = (evt) => {
+  const isInfo = checkIsInfo();
+  if(!isInfo) {
+    return;
   }
+  if (evt.target.classList.contains(RequestResultTags[infoRequestElement].button) || !evt.target.classList.contains(RequestResultTags[infoRequestElement].inner)) {
+    isInfo.remove();
+    body.removeEventListener('click', onBodyClick);
+  }
+};
+
+const onBodyKeydown = (evt) => {
+  const isInfo = checkIsInfo();
+  if(!isInfo && !isEscapeKey(evt)) {
+    return;
+  }
+  if(infoRequestElement.toLowerCase() === 'error') {
+    evt.stopPropagation();
+  }
+  isInfo.remove();
+  body.removeEventListener('keydown', onBodyKeydown);
 };
 
 const appendInfo = (infoId) => {
   showRequestInfo(infoId);
-  body.addEventListener('click', closeInfo);
-  body.addEventListener('keydown', closeInfo);
+  body.addEventListener('click', onBodyClick);
+  body.addEventListener('keydown', onBodyKeydown);
 };
 
 const setUserFormSubmit = (cb) => {
