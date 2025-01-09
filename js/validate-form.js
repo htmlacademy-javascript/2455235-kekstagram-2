@@ -134,6 +134,7 @@ const onBodyKeydown = (evt) => {
 };
 
 const appendInfo = (infoId) => {
+  infoRequestElement = infoId;
   showRequestInfo(infoId);
   body.addEventListener('click', onBodyClick);
   body.addEventListener('keydown', onBodyKeydown);
@@ -145,9 +146,9 @@ const setUserFormSubmit = (cb) => {
     if (pristine.validate()) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(() => appendInfo(infoRequestElement = ErrorIdTemplates.SUCCESS))
+        .then(() => appendInfo(ErrorIdTemplates.SUCCESS))
         .then(() => cb())
-        .catch(() => appendInfo(infoRequestElement = ErrorIdTemplates.SEND_ERROR))
+        .catch(() => appendInfo(ErrorIdTemplates.SEND_ERROR))
         .finally(unblockSubmitButton);
     }
   });
