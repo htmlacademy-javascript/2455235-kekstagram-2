@@ -25,39 +25,39 @@ const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
-let hashArray = [];
-let hashErrorMassege = [];
+let hashesArray = [];
+let hashErrorMessages = [];
 let infoRequestElement;
 
 const checkHashErrors = () => [
   {
-    check: hashArray.some((hash) => hash.slice(1).includes('#')),
+    check: hashesArray.some((hash) => hash.slice(1).includes('#')),
     error: ' хэштеги разделяются пробелами',
   },
   {
-    check: hashArray.some((hash) => hash[0] !== '#'),
+    check: hashesArray.some((hash) => hash[0] !== '#'),
     error: ' хэштег начинается с символа # (решётка)',
   },
   {
-    check: hashArray.some((hash) => hash === '#'),
+    check: hashesArray.some((hash) => hash === '#'),
     error: ' хеш-тег не может состоять только из одной решётки',
   },
   {
-    check: hashArray.some(
+    check: hashesArray.some(
       (hash) => !/^[a-zа-яё0-9]{1,19}$/i.test(hash.slice(1))
     ),
     error: ' строка после решётки должна состоять из букв и чисел',
   },
   {
-    check: hashArray.some((hash) => hash.length > MAX_HASH_LENGTH),
+    check: hashesArray.some((hash) => hash.length > MAX_HASH_LENGTH),
     error: ` максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
   },
   {
-    check: hashArray.length > MAX_NUMBER_HASHES,
+    check: hashesArray.length > MAX_NUMBER_HASHES,
     error: ` нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
   },
   {
-    check: [...new Set(hashArray)].length !== hashArray.length,
+    check: [...new Set(hashesArray)].length !== hashesArray.length,
     error: ' один и тот же хэштег не может быть использован дважды',
   },
 ];
@@ -73,18 +73,18 @@ const pristine = new Pristine(
 );
 
 const validateHashtags = (value) => {
-  hashErrorMassege = [];
+  hashErrorMessages = [];
   if (!value) {
     return true;
   }
-  hashArray = value.trim().toLowerCase().split(' ').filter(Boolean);
+  hashesArray = value.trim().toLowerCase().split(' ').filter(Boolean);
   checkHashErrors().map((errorHash) => {
     if (errorHash.check) {
-      hashErrorMassege.push(errorHash.error);
+      hashErrorMessages.push(errorHash.error);
     }
-    return hashErrorMassege;
+    return hashErrorMessages;
   });
-  return hashErrorMassege.length === 0;
+  return hashErrorMessages.length === 0;
 };
 
 const validateComment = (value) => value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
@@ -92,7 +92,7 @@ const validateComment = (value) => value.length >= 0 && value.length < MAX_COMME
 const commentErrorMassege = () =>
   `максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
 
-const hashesErrorText = () => hashErrorMassege;
+const hashesErrorText = () => hashErrorMessages;
 
 pristine.addValidator(imgHashtags, validateHashtags, hashesErrorText);
 pristine.addValidator(imgComments, validateComment, commentErrorMassege);

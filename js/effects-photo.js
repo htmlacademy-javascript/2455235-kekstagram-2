@@ -15,31 +15,31 @@ const FilterEffects = {
   CHROME:{
     filter: 'grayscale',
     unit: '',
-    range: [0, 1],
+    ranges: [0, 1],
     step: 0.1,
   },
   SEPIA: {
     filter: 'sepia',
     unit: '',
-    range: [0, 1],
+    ranges: [0, 1],
     step: 0.1,
   },
   MARVIN: {
     filter: 'invert',
     unit: '%',
-    range: [0, 100],
+    ranges: [0, 100],
     step: 1,
   },
   PHOBOS: {
     filter: 'blur',
     unit: 'px',
-    range: [0, 3],
+    ranges: [0, 3],
     step: 0.1,
   },
   HEAT: {
     filter: 'brightness',
     unit: '',
-    range: [1, 3],
+    ranges: [1, 3],
     step: 0.1,
   },
 };
@@ -93,10 +93,10 @@ const updateSliderData = (effect) => {
   const effectInFilters = effect.toUpperCase();
   sliderElement.noUiSlider.updateOptions({
     range: {
-      min: FilterEffects[effectInFilters].range[0],
-      max: FilterEffects[effectInFilters].range[1]
+      min: FilterEffects[effectInFilters].ranges[0],
+      max: FilterEffects[effectInFilters].ranges[1]
     },
-    start: FilterEffects[effectInFilters].range[1],
+    start: FilterEffects[effectInFilters].ranges[1],
     step: FilterEffects[effectInFilters].step
   });
 };
