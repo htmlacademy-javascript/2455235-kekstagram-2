@@ -131,4 +131,13 @@ const removeScaleChanges = () => {
   scaleValue.setAttribute('value', `${ScaleExtremums.MAX}`);
   imgUploadPreview.style.transform = 'scale(1)';
 };
-export {removeScaleChanges, imgUploadForm };
+
+const removeFilterStyle = () => {
+  imgUploadPreview.style.removeProperty('filter');
+};
+
+const hideSlider = () => {
+  sliderContainer.classList.add('hidden');
+};
+
+export {removeScaleChanges, removeFilterStyle, hideSlider, imgUploadForm };
