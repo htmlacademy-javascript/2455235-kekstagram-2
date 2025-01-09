@@ -8,8 +8,8 @@ const Filters = {
 };
 
 const SORT_FUNCTIONS = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a,b) => b.comments.length - a.comments.length
+  getRandom: () => 0.5 - Math.random(),
+  getDiscussed: (a,b) => b.comments.length - a.comments.length
 };
 
 const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
@@ -31,10 +31,10 @@ const getPhotosToRender = (filter) => {
   const copyPhotos = photos.slice();
   switch (filter) {
     case Filters.RANDOM:
-      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.random).slice(0, PHOTO_NUMBERS_RANDOM);
+      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.getRandom).slice(0, PHOTO_NUMBERS_RANDOM);
       break;
     case Filters.DISCUSSED:
-      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.discussed).slice(0, PHOTO_NUMBERS_DEFAULT);
+      photosToRender = copyPhotos.sort(SORT_FUNCTIONS.getDiscussed).slice(0, PHOTO_NUMBERS_DEFAULT);
       break;
     case Filters.DEFAULT:
       photosToRender = copyPhotos.slice(0, PHOTO_NUMBERS_DEFAULT);

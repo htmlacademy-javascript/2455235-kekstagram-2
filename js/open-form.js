@@ -1,7 +1,7 @@
 import { body } from './open-full-photo.js';
 import { isEscapeKey } from './utils.js';
 import { pristine, imgHashtags } from './validate-form.js';
-import { removeScaleChanges, imgUploadForm } from './effects-photo.js';
+import { removeScaleChanges, removeFilterStyle, hideSlider, imgUploadForm } from './effects-photo.js';
 
 const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadClose = imgUploadForm.querySelector('.img-upload__cancel');
@@ -33,6 +33,8 @@ function onUploadCloseClick() {
   pristine.reset();
   clearForm();
   removeScaleChanges();
+  removeFilterStyle();
+  hideSlider();
 }
 
 export { imgUploadForm, onUploadCloseClick, openUploadForm };
